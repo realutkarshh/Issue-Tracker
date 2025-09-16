@@ -1,0 +1,7 @@
+fastapi
+uvicorn
+motor
+pymongo
+python-decouple
+pydantic[email]
+pydantic-settings  # Add this line
