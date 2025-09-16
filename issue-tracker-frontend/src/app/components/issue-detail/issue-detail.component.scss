@@ -1,0 +1,239 @@
+.issue-detail-container {
+  padding: 24px;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.loading-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 48px;
+  
+  p {
+    margin-top: 16px;
+    color: #666;
+  }
+}
+
+.error-section {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 400px;
+  
+  .error-card {
+    max-width: 500px;
+    width: 100%;
+  }
+  
+  .error-content {
+    text-align: center;
+    padding: 24px;
+    
+    mat-icon {
+      font-size: 64px;
+      width: 64px;
+      height: 64px;
+      margin-bottom: 16px;
+    }
+    
+    h3 {
+      margin: 0 0 8px 0;
+      color: #d32f2f;
+    }
+    
+    p {
+      margin: 0 0 24px 0;
+      color: #666;
+    }
+    
+    .error-actions {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+    }
+  }
+}
+
+.issue-content {
+  .header-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+    
+    .back-button {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .header-actions {
+      display: flex;
+      gap: 16px;
+      
+      button {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+    }
+  }
+  
+  .content-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 24px;
+    
+    .main-details {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+      
+      .issue-card {
+        .card-header {
+          display: flex;
+          justify-content: space-between;
+          align-items: flex-start;
+          width: 100%;
+          
+          mat-card-title {
+            margin: 0;
+            font-size: 24px;
+            font-weight: 500;
+            color: #333;
+            flex: 1;
+            margin-right: 16px;
+          }
+          
+          .status-badges {
+            display: flex;
+            gap: 8px;
+            flex-shrink: 0;
+          }
+        }
+        
+        .issue-description {
+          margin-top: 16px;
+          
+          h3 {
+            margin: 0 0 12px 0;
+            color: #333;
+            font-size: 16px;
+            font-weight: 500;
+          }
+          
+          .description-text {
+            margin: 0;
+            line-height: 1.6;
+            color: #555;
+            white-space: pre-wrap;
+          }
+          
+          .no-description {
+            margin: 0;
+            color: #999;
+            font-style: italic;
+          }
+        }
+      }
+      
+      .metadata-card {
+        .metadata-grid {
+          display: grid;
+          gap: 16px;
+          
+          .metadata-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+            border-bottom: 1px solid #eee;
+            
+            &:last-child {
+              border-bottom: none;
+            }
+            
+            .label {
+              font-weight: 500;
+              color: #333;
+              min-width: 120px;
+            }
+            
+            .value {
+              color: #666;
+              font-family: monospace;
+              font-size: 14px;
+              
+              &.chip-value {
+                font-family: inherit;
+              }
+            }
+          }
+        }
+      }
+    }
+    
+    .json-section {
+      .json-card {
+        position: sticky;
+        top: 24px;
+        
+        .json-display {
+          background-color: #f5f5f5;
+          border: 1px solid #ddd;
+          border-radius: 4px;
+          padding: 16px;
+          margin: 0;
+          font-family: 'Courier New', monospace;
+          font-size: 12px;
+          line-height: 1.4;
+          color: #333;
+          overflow-x: auto;
+          max-height: 500px;
+          overflow-y: auto;
+        }
+      }
+    }
+  }
+}
+
+// Responsive design
+@media (max-width: 1024px) {
+  .issue-content .content-grid {
+    grid-template-columns: 1fr;
+    
+    .json-section .json-card {
+      position: static;
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .issue-detail-container {
+    padding: 16px;
+  }
+  
+  .issue-content .header-section {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 16px;
+    
+    .header-actions {
+      justify-content: center;
+    }
+  }
+  
+  .main-details .metadata-card .metadata-grid .metadata-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+    
+    .label {
+      min-width: unset;
+      font-size: 14px;
+    }
+  }
+}

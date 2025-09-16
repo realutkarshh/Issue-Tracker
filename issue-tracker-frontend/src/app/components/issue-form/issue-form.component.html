@@ -1,0 +1,182 @@
+<div class="issue-form-container">
+  <!-- Loading State -->
+  <div *ngIf="loading" class="loading-section">
+    <mat-spinner diameter="50"></mat-spinner>
+    <p>Loading issue data...</p>
+  </div>
+
+  <!-- Form Content -->
+  <div *ngIf="!loading" class="form-content">
+    
+    <!-- Header Section -->
+    <div class="header-section">
+      <button mat-button (click)="cancel()" class="back-button">
+        <mat-icon>arrow_back</mat-icon>
+        Back to Issues
+      </button>
+      
+      <h1>{{ isEditMode ? 'Edit Issue' : 'Create New Issue' }}</h1>
+    </div>
+
+    <!-- Form Card -->
+    <mat-card class="form-card">
+      <mat-card-header>
+        <mat-card-title>
+          <mat-icon>{{ isEditMode ? 'edit' : 'add' }}</mat-icon>
+          {{ isEditMode ? 'Update Issue Details' : 'Issue Information' }}
+        </mat-card-title>
+      </mat-card-header>
+
+      <mat-card-content>
+        <form [formGroup]="issueForm" (ngSubmit)="onSubmit()" class="issue-form">
+          
+          <!-- Title Field -->
+          <div class="form-row">
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Title *</mat-label>
+              <input 
+                matInput 
+                formControlName="title"
+                placeholder="Enter issue title"
+                maxlength="200">
+              <mat-hint>{{ issueForm.get('title')?.value?.length || 0 }}/200</mat-hint>
+              <mat-error *ngIf="hasError('title', 'required')">
+                Title is required
+              </mat-error>
+              <mat-error *ngIf="hasError('title', 'minlength')">
+                Title must be at least 3 characters long
+              </mat-error>
+              <mat-error *ngIf="hasError('title', 'maxlength')">
+                Title cannot exceed 200 characters
+              </mat-error>
+            </mat-form-field>
+          </div>
+
+          <!-- Description Field -->
+          <div class="form-row">
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Description</mat-label>
+              <textarea 
+                matInput 
+                formControlName="description"
+                placeholder="Describe the issue in detail"
+                rows="4"
+                maxlength="1000">
+              </textarea>
+              <mat-hint>{{ issueForm.get('description')?.value?.length || 0 }}/1000</mat-hint>
+              <mat-error *ngIf="hasError('description', 'maxlength')">
+                Description cannot exceed 1000 characters
+              </mat-error>
+            </mat-form-field>
+          </div>
+
+          <!-- Status and Priority Row -->
+          <div class="form-row two-column">
+            <!-- Status Field -->
+            <mat-form-field appearance="outline">
+              <mat-label>Status *</mat-label>
+              <mat-select formControlName="status">
+                <mat-option *ngFor="let status of statusOptions" [value]="status">
+                  {{ status | titlecase }}
+                </mat-option>
+              </mat-select>
+              <mat-error *ngIf="hasError('status', 'required')">
+                Status is required
+              </mat-error>
+            </mat-form-field>
+
+            <!-- Priority Field -->
+            <mat-form-field appearance="outline">
+              <mat-label>Priority *</mat-label>
+              <mat-select formControlName="priority">
+                <mat-option *ngFor="let priority of priorityOptions" [value]="priority">
+                  {{ priority | titlecase }}
+                </mat-option>
+              </mat-select>
+              <mat-error *ngIf="hasError('priority', 'required')">
+                Priority is required
+              </mat-error>
+            </mat-form-field>
+          </div>
+
+          <!-- Assignee Field -->
+          <div class="form-row">
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Assignee</mat-label>
+              <input 
+                matInput 
+                formControlName="assignee"
+                placeholder="Enter assignee name"
+                maxlength="100">
+              <mat-hint>{{ issueForm.get('assignee')?.value?.length || 0 }}/100</mat-hint>
+              <mat-error *ngIf="hasError('assignee', 'maxlength')">
+                Assignee name cannot exceed 100 characters
+              </mat-error>
+            </mat-form-field>
+          </div>
+
+          <!-- Form Actions -->
+          <div class="form-actions">
+            <div class="left-actions">
+              <button 
+                type="button" 
+                mat-stroked-button 
+                (click)="resetForm()"
+                [disabled]="saving">
+                <mat-icon>refresh</mat-icon>
+                Reset
+              </button>
+            </div>
+
+            <div class="right-actions">
+              <button 
+                type="button" 
+                mat-button 
+                (click)="cancel()"
+                [disabled]="saving">
+                Cancel
+              </button>
+              
+              <button 
+                type="submit" 
+                mat-raised-button 
+                color="primary"
+                [disabled]="issueForm.invalid || saving">
+                
+                <mat-spinner 
+                  *ngIf="saving" 
+                  diameter="20" 
+                  class="button-spinner">
+                </mat-spinner>
+                
+                <mat-icon *ngIf="!saving">
+                  {{ isEditMode ? 'save' : 'add' }}
+                </mat-icon>
+                
+                {{ isEditMode ? 'Update Issue' : 'Create Issue' }}
+              </button>
+            </div>
+          </div>
+
+        </form>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Form Debug Info (Remove in production) -->
+    <mat-card class="debug-card" *ngIf="!saving">
+      <mat-card-header>
+        <mat-card-title>Form Debug Info</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="debug-info">
+          <p><strong>Form Valid:</strong> {{ issueForm.valid }}</p>
+          <p><strong>Form Value:</strong></p>
+          <pre>{{ issueForm.value | json }}</pre>
+          <p><strong>Form Errors:</strong></p>
+          <pre>{{ getFormErrors() | json }}</pre>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+  </div>
+</div>

@@ -1,0 +1,27 @@
+<div class="app-layout">
+  <!-- Header Navigation -->
+  <header class="app-header">
+    <div class="header-content">
+      <div class="logo-section">
+        <mat-icon class="logo-icon">bug_report</mat-icon>
+        <h1 class="app-title">Issue Tracker</h1>
+      </div>
+      
+      <nav class="main-nav">
+        <a mat-button routerLink="/issues" routerLinkActive="active">
+          <mat-icon>list</mat-icon>
+          All Issues
+        </a>
+        <a mat-raised-button color="primary" routerLink="/create">
+          <mat-icon>add</mat-icon>
+          Create Issue
+        </a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Main Content Area -->
+  <main class="main-content">
+    <router-outlet></router-outlet>
+  </main>
+</div>

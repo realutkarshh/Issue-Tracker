@@ -1,0 +1,178 @@
+.issue-form-container {
+  padding: 24px;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.loading-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 48px;
+  
+  p {
+    margin-top: 16px;
+    color: #666;
+  }
+}
+
+.form-content {
+  .header-section {
+    display: flex;
+    align-items: center;
+    margin-bottom: 24px;
+    gap: 16px;
+    
+    .back-button {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    h1 {
+      margin: 0;
+      color: #333;
+      font-weight: 500;
+      flex: 1;
+    }
+  }
+  
+  .form-card {
+    margin-bottom: 24px;
+    
+    mat-card-header {
+      margin-bottom: 16px;
+      
+      mat-card-title {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        color: #333;
+        
+        mat-icon {
+          color: #1976d2;
+        }
+      }
+    }
+    
+    .issue-form {
+      .form-row {
+        margin-bottom: 16px;
+        
+        &.two-column {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 16px;
+        }
+        
+        .full-width {
+          width: 100%;
+        }
+      }
+      
+      .form-actions {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 32px;
+        padding-top: 24px;
+        border-top: 1px solid #eee;
+        
+        .left-actions {
+          display: flex;
+          gap: 16px;
+        }
+        
+        .right-actions {
+          display: flex;
+          gap: 16px;
+          align-items: center;
+          
+          button {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            
+            .button-spinner {
+              margin-right: 8px;
+            }
+          }
+        }
+      }
+    }
+  }
+  
+  .debug-card {
+    background-color: #f8f9fa;
+    border: 1px solid #dee2e6;
+    
+    .debug-info {
+      font-family: monospace;
+      font-size: 12px;
+      
+      p {
+        margin: 8px 0;
+      }
+      
+      pre {
+        background-color: #f1f3f4;
+        padding: 12px;
+        border-radius: 4px;
+        overflow-x: auto;
+        margin: 8px 0;
+      }
+    }
+  }
+}
+
+// Form field customization
+mat-form-field {
+  .mat-mdc-form-field-hint-wrapper,
+  .mat-mdc-form-field-error-wrapper {
+    padding: 0 16px;
+  }
+}
+
+// Responsive design
+@media (max-width: 768px) {
+  .issue-form-container {
+    padding: 16px;
+  }
+  
+  .form-content {
+    .header-section {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 12px;
+    }
+    
+    .form-card .issue-form {
+      .form-row.two-column {
+        grid-template-columns: 1fr;
+        gap: 8px;
+      }
+      
+      .form-actions {
+        flex-direction: column;
+        gap: 16px;
+        align-items: stretch;
+        
+        .left-actions,
+        .right-actions {
+          justify-content: center;
+        }
+      }
+    }
+  }
+}
+
+// Animation for form submission
+.button-spinner {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
