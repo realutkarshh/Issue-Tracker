@@ -6,8 +6,10 @@ import { CommonModule } from '@angular/common';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatMenuModule } from '@angular/material/menu';  // ✅ ADD THIS
 
-import { IssueService } from './services/issue';
+import { IssueService } from './services/issue.service';
 
 @Component({
   selector: 'app-root',
@@ -18,10 +20,12 @@ import { IssueService } from './services/issue';
     CommonModule,
     MatToolbarModule,
     MatButtonModule,
-    MatIconModule
+    MatIconModule,
+    MatSnackBarModule,
+    MatMenuModule  // ✅ ADD THIS
   ],
-  templateUrl: './app.component.html',
-  styleUrl: './app.component.scss'
+  templateUrl: './app.component.html'
+  // ✅ No styleUrl - using Tailwind CSS
 })
 export class AppComponent implements OnInit {
   title = 'Issue Tracker';
@@ -30,13 +34,18 @@ export class AppComponent implements OnInit {
 
   ngOnInit(): void {
     // Test API connection on app startup
+    console.log('🚀 Issue Tracker Application Started');
+    this.testBackendConnection();
+  }
+
+  private testBackendConnection(): void {
     this.issueService.healthCheck().subscribe({
       next: (response) => {
-        console.log('✅ Backend connected:', response);
+        console.log('✅ Backend connected successfully:', response);
       },
       error: (error) => {
-        console.log('❌ Backend not available:', error);
-        console.log('Make sure FastAPI server is running on http://localhost:8000');
+        console.warn('⚠️ Backend not available:', error);
+        console.log('💡 Make sure your FastAPI server is running on http://localhost:8000');
       }
     });
   }

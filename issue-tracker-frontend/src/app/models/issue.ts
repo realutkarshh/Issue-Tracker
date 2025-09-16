@@ -1,13 +1,13 @@
-// Similar to your React types, but with more structure
+// Updated src/app/models/issue.ts
 export interface Issue {
   id: string;
   title: string;
-  description?: string;  // Optional field
+  description?: string;
   status: IssueStatus;
   priority: IssuePriority;
   assignee?: string;
-  created_at: Date;
-  updated_at: Date;
+  created_at: string;    // ✅ Changed from Date to string
+  updated_at: string;    // ✅ Changed from Date to string
 }
 
 export enum IssueStatus {
@@ -23,7 +23,6 @@ export enum IssuePriority {
   CRITICAL = 'critical'
 }
 
-// DTOs for API requests (like form data types in React)
 export interface CreateIssueRequest {
   title: string;
   description?: string;
@@ -40,7 +39,6 @@ export interface UpdateIssueRequest {
   assignee?: string;
 }
 
-// Query parameters interface
 export interface IssueQueryParams {
   page?: number;
   page_size?: number;

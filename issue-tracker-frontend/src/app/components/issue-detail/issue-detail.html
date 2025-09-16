@@ -1,0 +1,293 @@
+<div class="min-h-screen bg-gray-50">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    
+    <!-- Loading State -->
+    <div *ngIf="loading" class="flex justify-center items-center min-h-96">
+      <div class="bg-white rounded-xl shadow-lg p-12 text-center max-w-md w-full">
+        <mat-spinner diameter="60" class="mx-auto mb-6"></mat-spinner>
+        <h3 class="text-xl font-semibold text-gray-700 mb-2">Loading Issue Details...</h3>
+        <p class="text-gray-500">Please wait while we fetch the issue information.</p>
+      </div>
+    </div>
+
+    <!-- Error State -->
+    <div *ngIf="error && !loading" class="flex justify-center items-center min-h-96">
+      <div class="bg-white rounded-xl shadow-lg p-12 text-center max-w-2xl w-full border-l-4 border-red-500">
+        <mat-icon class="text-6xl text-red-500 mb-6">error_outline</mat-icon>
+        <h3 class="text-2xl font-semibold text-gray-800 mb-4">Unable to Load Issue</h3>
+        <p class="text-gray-600 mb-8 leading-relaxed">{{ error }}</p>
+        <div class="flex flex-col sm:flex-row gap-4 justify-center">
+          <button 
+            mat-raised-button 
+            color="primary"
+            (click)="retryLoad()"
+            class="flex items-center justify-center gap-2 px-6 py-3 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-all">
+            <mat-icon>refresh</mat-icon>
+            Try Again
+          </button>
+          <button 
+            mat-button
+            (click)="goBack()"
+            class="flex items-center justify-center gap-2 px-6 py-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-all">
+            <mat-icon>arrow_back</mat-icon>
+            Back to Issues
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Issue Content -->
+    <div *ngIf="issue && !loading && !error">
+      
+      <!-- Header Section -->
+      <div class="mb-8">
+        <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6">
+          <!-- Back Button & Title -->
+          <div class="flex items-start gap-4 flex-1">
+            <button 
+              mat-icon-button
+              (click)="goBack()"
+              class="mt-1 text-blue-600 hover:bg-blue-50 transition-all"
+              matTooltip="Back to Issues List">
+              <mat-icon>arrow_back</mat-icon>
+            </button>
+            <div class="flex-1">
+              <div class="flex items-center gap-3 mb-2">
+                <mat-icon class="text-3xl text-blue-500">assignment</mat-icon>
+                <h1 class="text-3xl lg:text-4xl font-bold text-gray-800 leading-tight">
+                  {{ issue.title }}
+                </h1>
+              </div>
+              <div class="flex flex-wrap items-center gap-3">
+                <!-- Status Badge -->
+                <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium border"
+                      [class]="getStatusClasses(issue.status)">
+                  <mat-icon class="text-sm mr-2">{{ getStatusIcon(issue.status) }}</mat-icon>
+                  {{ issue.status | titlecase }}
+                </span>
+                <!-- Priority Badge -->
+                <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium border"
+                      [class]="getPriorityClasses(issue.priority)">
+                  <mat-icon class="text-sm mr-2">{{ getPriorityIcon(issue.priority) }}</mat-icon>
+                  {{ issue.priority | titlecase }} Priority
+                </span>
+                <!-- Issue ID -->
+                <code class="bg-gray-100 text-gray-800 px-3 py-1 rounded-lg text-sm font-mono border">
+                  {{ issue.id }}
+                </code>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Action Buttons -->
+          <div class="flex flex-wrap gap-3">
+            <button 
+              mat-button
+              (click)="shareIssue()"
+              class="flex items-center gap-2 px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg transition-all"
+              matTooltip="Copy issue URL">
+              <mat-icon>share</mat-icon>
+              Share
+            </button>
+            <button 
+              mat-raised-button 
+              color="primary"
+              (click)="editIssue()"
+              class="flex items-center gap-2 px-6 py-3 bg-blue-500 hover:bg-blue-600 text-white rounded-lg shadow-lg hover:shadow-xl transition-all">
+              <mat-icon>edit</mat-icon>
+              Edit Issue
+            </button>
+            <button 
+              mat-raised-button 
+              color="warn"
+              (click)="deleteIssue()"
+              [disabled]="deleting"
+              class="flex items-center gap-2 px-6 py-3 bg-red-500 hover:bg-red-600 text-white rounded-lg shadow-lg hover:shadow-xl transition-all disabled:opacity-50">
+              <mat-spinner *ngIf="deleting" diameter="16" class="mr-1"></mat-spinner>
+              <mat-icon *ngIf="!deleting">delete</mat-icon>
+              {{ deleting ? 'Deleting...' : 'Delete Issue' }}
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Main Content Grid -->
+      <div class="grid grid-cols-1 xl:grid-cols-3 gap-8">
+        
+        <!-- Left Column - Issue Details -->
+        <div class="xl:col-span-2 space-y-6">
+          
+          <!-- Description Section -->
+          <div class="bg-white rounded-xl shadow-lg overflow-hidden">
+            <div class="bg-gradient-to-r from-blue-500 to-blue-600 px-6 py-4">
+              <h2 class="text-xl font-semibold text-white flex items-center gap-3">
+                <mat-icon class="text-white">description</mat-icon>
+                Description
+              </h2>
+            </div>
+            <div class="p-6">
+              <div *ngIf="issue.description; else noDescription" 
+                   class="prose prose-gray max-w-none">
+                <p class="text-gray-700 leading-relaxed whitespace-pre-wrap text-base">
+                  {{ issue.description }}
+                </p>
+              </div>
+              <ng-template #noDescription>
+                <div class="text-center py-8">
+                  <mat-icon class="text-4xl text-gray-300 mb-3">description</mat-icon>
+                  <p class="text-gray-500 italic">No description provided for this issue.</p>
+                  <button 
+                    mat-button 
+                    color="primary" 
+                    (click)="editIssue()"
+                    class="mt-4">
+                    <mat-icon>edit</mat-icon>
+                    Add Description
+                  </button>
+                </div>
+              </ng-template>
+            </div>
+          </div>
+
+          <!-- Timeline Section -->
+          <div class="bg-white rounded-xl shadow-lg overflow-hidden">
+            <div class="bg-gradient-to-r from-green-500 to-green-600 px-6 py-4">
+              <h2 class="text-xl font-semibold text-white flex items-center gap-3">
+                <mat-icon class="text-white">timeline</mat-icon>
+                Timeline
+              </h2>
+            </div>
+            <div class="p-6">
+              <div class="space-y-4">
+                <!-- Created Event -->
+                <div class="flex items-start gap-4">
+                  <div class="flex-shrink-0 w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
+                    <mat-icon class="text-blue-600 text-sm">add_circle</mat-icon>
+                  </div>
+                  <div class="flex-1 min-w-0">
+                    <div class="flex items-center gap-2 mb-1">
+                      <span class="text-sm font-medium text-gray-900">Issue Created</span>
+                      <span class="text-xs text-gray-500">{{ getRelativeTime(issue.created_at) }}</span>
+                    </div>
+                    <p class="text-sm text-gray-600">{{ formatDate(issue.created_at) }}</p>
+                  </div>
+                </div>
+                
+                <!-- Updated Event (if different from created) -->
+                <div *ngIf="issue.updated_at !== issue.created_at" class="flex items-start gap-4">
+                  <div class="flex-shrink-0 w-10 h-10 bg-purple-100 rounded-full flex items-center justify-center">
+                    <mat-icon class="text-purple-600 text-sm">update</mat-icon>
+                  </div>
+                  <div class="flex-1 min-w-0">
+                    <div class="flex items-center gap-2 mb-1">
+                      <span class="text-sm font-medium text-gray-900">Last Updated</span>
+                      <span class="text-xs text-gray-500">{{ getRelativeTime(issue.updated_at) }}</span>
+                    </div>
+                    <p class="text-sm text-gray-600">{{ formatDate(issue.updated_at) }}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Column - Metadata & JSON -->
+        <div class="space-y-6">
+          
+          <!-- Issue Metadata -->
+          <div class="bg-white rounded-xl shadow-lg overflow-hidden">
+            <div class="bg-gradient-to-r from-purple-500 to-purple-600 px-6 py-4">
+              <h2 class="text-xl font-semibold text-white flex items-center gap-3">
+                <mat-icon class="text-white">info</mat-icon>
+                Issue Details
+              </h2>
+            </div>
+            <div class="p-6">
+              <div class="space-y-4">
+                
+                <!-- Status -->
+                <div class="flex items-center justify-between py-3 border-b border-gray-100">
+                  <div class="flex items-center gap-3">
+                    <mat-icon class="text-gray-400">flag</mat-icon>
+                    <span class="text-sm font-medium text-gray-700">Status</span>
+                  </div>
+                  <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium border"
+                        [class]="getStatusClasses(issue.status)">
+                    <mat-icon class="text-xs mr-1">{{ getStatusIcon(issue.status) }}</mat-icon>
+                    {{ issue.status | titlecase }}
+                  </span>
+                </div>
+
+                <!-- Priority -->
+                <div class="flex items-center justify-between py-3 border-b border-gray-100">
+                  <div class="flex items-center gap-3">
+                    <mat-icon class="text-gray-400">priority_high</mat-icon>
+                    <span class="text-sm font-medium text-gray-700">Priority</span>
+                  </div>
+                  <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium border"
+                        [class]="getPriorityClasses(issue.priority)">
+                    <mat-icon class="text-xs mr-1">{{ getPriorityIcon(issue.priority) }}</mat-icon>
+                    {{ issue.priority | titlecase }}
+                  </span>
+                </div>
+
+                <!-- Assignee -->
+                <div class="flex items-center justify-between py-3 border-b border-gray-100">
+                  <div class="flex items-center gap-3">
+                    <mat-icon class="text-gray-400">person</mat-icon>
+                    <span class="text-sm font-medium text-gray-700">Assignee</span>
+                  </div>
+                  <div class="text-right">
+                    <div *ngIf="issue.assignee; else unassigned" class="flex items-center gap-2">
+                      <mat-icon class="text-blue-500 text-lg">account_circle</mat-icon>
+                      <span class="text-sm font-medium text-gray-900">{{ issue.assignee }}</span>
+                    </div>
+                    <ng-template #unassigned>
+                      <div class="flex items-center gap-2">
+                        <mat-icon class="text-gray-400 text-lg">person_off</mat-icon>
+                        <span class="text-sm text-gray-500 italic">Unassigned</span>
+                      </div>
+                    </ng-template>
+                  </div>
+                </div>
+
+                <!-- Issue ID -->
+                <div class="flex items-center justify-between py-3">
+                  <div class="flex items-center gap-3">
+                    <mat-icon class="text-gray-400">fingerprint</mat-icon>
+                    <span class="text-sm font-medium text-gray-700">Issue ID</span>
+                  </div>
+                  <code class="bg-gray-100 text-gray-800 px-2 py-1 rounded text-xs font-mono border select-all">
+                    {{ issue.id }}
+                  </code>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- JSON Data Section -->
+          <div class="bg-white rounded-xl shadow-lg overflow-hidden">
+            <div class="bg-gradient-to-r from-gray-700 to-gray-800 px-6 py-4">
+              <div class="flex items-center justify-between">
+                <h2 class="text-xl font-semibold text-white flex items-center gap-3">
+                  <mat-icon class="text-white">code</mat-icon>
+                  Raw JSON Data
+                </h2>
+                <button 
+                  mat-icon-button
+                  (click)="copyJsonToClipboard()"
+                  class="text-white hover:bg-white/10 transition-all"
+                  matTooltip="Copy JSON to clipboard">
+                  <mat-icon>content_copy</mat-icon>
+                </button>
+              </div>
+            </div>
+            <div class="p-0">
+              <pre class="bg-gray-900 text-green-400 p-6 m-0 text-xs font-mono leading-relaxed overflow-x-auto max-h-96 overflow-y-auto border-0">{{ getFormattedJson() }}</pre>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

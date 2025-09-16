@@ -1,0 +1,151 @@
+<div class="min-h-screen bg-gray-50 p-6">
+  <div class="max-w-6xl mx-auto">
+    
+    <!-- Header -->
+    <div class="bg-white rounded-xl shadow-lg p-6 mb-6">
+      <div class="flex justify-between items-center">
+        <div>
+          <h1 class="text-3xl font-bold text-gray-800 mb-2">Issues Dashboard</h1>
+          <p class="text-gray-600">Manage all your MongoDB issues</p>
+        </div>
+        <div class="flex gap-3">
+          <button 
+            mat-button
+            (click)="testConnection()"
+            class="bg-gray-100 hover:bg-gray-200 px-4 py-2 rounded-lg">
+            <mat-icon>wifi</mat-icon>
+            Test Connection
+          </button>
+          <button 
+            mat-button
+            (click)="refreshIssues()"
+            [disabled]="loading"
+            class="bg-blue-100 hover:bg-blue-200 text-blue-600 px-4 py-2 rounded-lg">
+            <mat-icon>refresh</mat-icon>
+            Refresh
+          </button>
+          <button 
+            mat-raised-button
+            routerLink="/create"
+            class="bg-blue-500 hover:bg-blue-600 text-white px-6 py-2 rounded-lg">
+            <mat-icon>add</mat-icon>
+            Create Issue
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Loading -->
+    <div *ngIf="loading" class="text-center py-12">
+      <mat-spinner class="mx-auto mb-4"></mat-spinner>
+      <p class="text-gray-600">Loading issues from MongoDB...</p>
+    </div>
+
+    <!-- Error -->
+    <div *ngIf="error && !loading" class="bg-red-50 border border-red-200 rounded-lg p-6 mb-6">
+      <div class="flex items-center gap-3">
+        <mat-icon class="text-red-500">error</mat-icon>
+        <div>
+          <h3 class="font-semibold text-red-800">Connection Error</h3>
+          <p class="text-red-600 mt-1">{{ error }}</p>
+        </div>
+      </div>
+      <button 
+        mat-raised-button 
+        color="primary"
+        (click)="refreshIssues()"
+        class="mt-4">
+        <mat-icon>refresh</mat-icon>
+        Try Again
+      </button>
+    </div>
+
+    <!-- No Issues -->
+    <div *ngIf="!loading && !error && issues.length === 0" class="bg-white rounded-xl shadow-lg p-12 text-center">
+      <mat-icon class="text-gray-300 text-6xl mb-4">inbox</mat-icon>
+      <h3 class="text-xl font-semibold text-gray-600 mb-2">No Issues Found</h3>
+      <p class="text-gray-500 mb-6">Create your first issue to get started.</p>
+      <button mat-raised-button color="primary" routerLink="/create">
+        <mat-icon>add</mat-icon>
+        Create First Issue
+      </button>
+    </div>
+
+    <!-- Issues Table -->
+    <div *ngIf="!loading && !error && issues.length > 0" class="bg-white rounded-xl shadow-lg overflow-hidden">
+      <div class="p-6 border-b">
+        <h3 class="text-lg font-semibold text-gray-800">
+          All Issues ({{ issues.length }} total)
+        </h3>
+      </div>
+
+      <div class="overflow-x-auto">
+        <table mat-table [dataSource]="dataSource" class="w-full">
+          
+          <!-- Title Column -->
+          <ng-container matColumnDef="title">
+            <th mat-header-cell *matHeaderCellDef class="p-4 text-left font-semibold">Title</th>
+            <td mat-cell *matCellDef="let issue" class="p-4">
+              <div class="cursor-pointer" (click)="viewIssue(issue)">
+                <h4 class="font-semibold text-gray-900 hover:text-blue-600">{{ issue.title }}</h4>
+                <p class="text-sm text-gray-500 mt-1" *ngIf="issue.description">
+                  {{ issue.description | slice:0:80 }}{{ issue.description.length > 80 ? '...' : '' }}
+                </p>
+              </div>
+            </td>
+          </ng-container>
+
+          <!-- Status Column -->
+          <ng-container matColumnDef="status">
+            <th mat-header-cell *matHeaderCellDef class="p-4 text-left font-semibold">Status</th>
+            <td mat-cell *matCellDef="let issue" class="p-4">
+              <span class="px-3 py-1 rounded-full text-xs font-medium border"
+                    [class]="getStatusClasses(issue.status)">
+                {{ issue.status | titlecase }}
+              </span>
+            </td>
+          </ng-container>
+
+          <!-- Priority Column -->
+          <ng-container matColumnDef="priority">
+            <th mat-header-cell *matHeaderCellDef class="p-4 text-left font-semibold">Priority</th>
+            <td mat-cell *matCellDef="let issue" class="p-4">
+              <span class="px-3 py-1 rounded-full text-xs font-medium border"
+                    [class]="getPriorityClasses(issue.priority)">
+                {{ issue.priority | titlecase }}
+              </span>
+            </td>
+          </ng-container>
+
+          <!-- Assignee Column -->
+          <ng-container matColumnDef="assignee">
+            <th mat-header-cell *matHeaderCellDef class="p-4 text-left font-semibold">Assignee</th>
+            <td mat-cell *matCellDef="let issue" class="p-4">
+              <span *ngIf="issue.assignee" class="text-gray-900">{{ issue.assignee }}</span>
+              <span *ngIf="!issue.assignee" class="text-gray-400 italic">Unassigned</span>
+            </td>
+          </ng-container>
+
+          <!-- Actions Column -->
+          <ng-container matColumnDef="actions">
+            <th mat-header-cell *matHeaderCellDef class="p-4 text-center font-semibold">Actions</th>
+            <td mat-cell *matCellDef="let issue" class="p-4 text-center">
+              <div class="flex justify-center gap-2">
+                <button mat-icon-button (click)="editIssue(issue)" class="text-blue-600">
+                  <mat-icon>edit</mat-icon>
+                </button>
+                <button mat-icon-button (click)="deleteIssue(issue)" class="text-red-600">
+                  <mat-icon>delete</mat-icon>
+                </button>
+              </div>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns" class="bg-gray-50"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;" 
+              class="hover:bg-gray-50 cursor-pointer transition-colors"></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
