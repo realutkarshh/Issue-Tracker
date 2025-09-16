@@ -79,14 +79,26 @@ export class IssueService {
       );
   }
 
-  // Delete issue
-  deleteIssue(id: string): Observable<any> {
+  // Delete issue - ✅ Enhanced return type
+  deleteIssue(id: string): Observable<{message: string, deleted_id: string, deleted_title: string}> {
     const url = `${this.API_URL}/issues/${id}`;
     console.log('🗑️ Deleting issue at:', url);
     
-    return this.http.delete<any>(url)
+    return this.http.delete<{message: string, deleted_id: string, deleted_title: string}>(url)
       .pipe(
         tap(result => console.log('✅ Issue deleted:', result)),
+        catchError(this.handleError)
+      );
+  }
+
+  // ✅ Added debug database method
+  debugDatabase(): Observable<any> {
+    const url = `${this.API_URL}/debug/database`;
+    console.log('🔍 Checking database status at:', url);
+    
+    return this.http.get(url)
+      .pipe(
+        tap(status => console.log('✅ Database status:', status)),
         catchError(this.handleError)
       );
   }

@@ -1,13 +1,13 @@
-// Updated src/app/models/issue.ts
+// ✅ This file is perfect - matches backend exactly
 export interface Issue {
   id: string;
   title: string;
-  description?: string;
+  description?: string;  // Optional, matches backend
   status: IssueStatus;
   priority: IssuePriority;
-  assignee?: string;
-  created_at: string;    // ✅ Changed from Date to string
-  updated_at: string;    // ✅ Changed from Date to string
+  assignee?: string;     // Optional, matches backend
+  created_at: string;    // String format, matches backend
+  updated_at: string;    // String format, matches backend
 }
 
 export enum IssueStatus {
@@ -25,14 +25,14 @@ export enum IssuePriority {
 
 export interface CreateIssueRequest {
   title: string;
-  description?: string;
+  description?: string;  // Optional
   status: IssueStatus;
   priority: IssuePriority;
-  assignee?: string;
+  assignee?: string;     // Optional
 }
 
 export interface UpdateIssueRequest {
-  title?: string;
+  title?: string;        // All optional for updates
   description?: string;
   status?: IssueStatus;
   priority?: IssuePriority;
