@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  apiUrl: 'http://localhost:8000'  // Your FastAPI backend URL
+  apiUrl: 'https://issue-tracker-kp69.onrender.com'  
 };
