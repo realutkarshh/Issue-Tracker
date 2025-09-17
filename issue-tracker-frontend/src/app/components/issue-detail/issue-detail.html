@@ -1,35 +1,35 @@
-<div class="min-h-screen bg-slate-50">
+<div class="min-h-screen bg-black">
   <div class="max-w-7xl mx-auto px-3 sm:px-4 lg:px-8 py-4 sm:py-8">
     
     <!-- Loading State -->
     <div *ngIf="loading" class="flex justify-center items-center min-h-[400px] sm:min-h-[500px]">
-      <div class="bg-white rounded-lg border border-slate-200 p-8 sm:p-12 text-center max-w-md w-full shadow-sm">
-        <mat-spinner diameter="32" class="!text-slate-400 mx-auto mb-4"></mat-spinner>
-        <h3 class="text-lg font-medium text-slate-900 mb-2">Loading Issue</h3>
-        <p class="text-slate-600 text-sm">Please wait while we fetch the details</p>
+      <div class="bg-gray-950 rounded-lg border border-gray-800 p-8 sm:p-12 text-center max-w-md w-full shadow-2xl">
+        <mat-spinner diameter="32" class="!text-gray-600 mx-auto mb-4"></mat-spinner>
+        <h3 class="text-lg font-medium text-gray-100 mb-2">Loading Issue</h3>
+        <p class="text-gray-500 text-sm">Please wait while we fetch the details</p>
       </div>
     </div>
 
     <!-- Error State -->
     <div *ngIf="error && !loading" class="flex justify-center items-center min-h-[400px] sm:min-h-[500px]">
-      <div class="bg-white rounded-lg border border-slate-200 p-6 sm:p-8 text-center max-w-lg w-full shadow-sm border-l-4 !border-l-red-400">
-        <div class="w-12 h-12 mx-auto mb-4 bg-red-100 rounded-full flex items-center justify-center">
-          <mat-icon class="text-red-500 !text-xl">error_outline</mat-icon>
+      <div class="bg-gray-950 rounded-lg border border-gray-800 p-6 sm:p-8 text-center max-w-lg w-full shadow-2xl border-l-4 !border-l-red-500">
+        <div class="w-12 h-12 mx-auto mb-4 bg-red-950 rounded-full flex items-center justify-center">
+          <mat-icon class="text-red-400 !text-xl">error_outline</mat-icon>
         </div>
-        <h3 class="text-lg font-medium text-slate-900 mb-2">Unable to Load Issue</h3>
-        <p class="text-slate-600 text-sm mb-6 leading-relaxed">{{ error }}</p>
+        <h3 class="text-lg font-medium text-gray-100 mb-2">Unable to Load Issue</h3>
+        <p class="text-gray-400 text-sm mb-6 leading-relaxed">{{ error }}</p>
         <div class="flex flex-col sm:flex-row gap-3 justify-center">
           <button 
             mat-flat-button
             (click)="retryLoad()"
-            class="!bg-slate-900 !text-white !px-4 !py-2">
+            class="!bg-blue-600 !text-white !px-4 !py-2 !shadow-lg !shadow-blue-600/20">
             <mat-icon class="mr-2">refresh</mat-icon>
             Try Again
           </button>
           <button 
             mat-stroked-button
             (click)="goBack()"
-            class="!border-slate-200 !text-slate-700 hover:!bg-slate-50 !px-4 !py-2">
+            class="!border-gray-800 !text-gray-400 hover:!bg-gray-900 hover:!text-gray-300 !px-4 !py-2">
             <mat-icon class="mr-2">arrow_back</mat-icon>
             Back to Issues
           </button>
@@ -49,17 +49,17 @@
             <button 
               mat-icon-button
               (click)="goBack()"
-              class="!text-slate-500 hover:!bg-slate-100 mt-1 flex-shrink-0"
+              class="!text-gray-500 hover:!bg-gray-900 mt-1 flex-shrink-0"
               matTooltip="Back to Issues">
               <mat-icon>arrow_back</mat-icon>
             </button>
             <div class="flex-1 min-w-0">
-              <h1 class="text-xl sm:text-2xl lg:text-3xl font-semibold text-slate-900 leading-tight mb-3 break-words">
+              <h1 class="text-xl sm:text-2xl lg:text-3xl font-semibold text-gray-100 leading-tight mb-3 break-words">
                 {{ issue.title }}
               </h1>
               <div class="flex flex-wrap items-center gap-2 sm:gap-3">
                 <!-- Issue ID -->
-                <span class="text-slate-500 text-sm font-mono">#{{ issue.id }}</span>
+                <span class="text-gray-500 text-sm font-mono">#{{ issue.id }}</span>
                 
                 <!-- Status Badge -->
                 <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium"
@@ -81,7 +81,7 @@
             <button 
               mat-stroked-button
               (click)="shareIssue()"
-              class="!border-slate-200 !text-slate-700 hover:!bg-slate-50 !px-3 sm:!px-4 !py-2 !text-sm flex-1 sm:flex-initial"
+              class="!border-gray-800 !text-gray-400 hover:!bg-gray-900 hover:!text-gray-300 !px-3 sm:!px-4 !py-2 !text-sm flex-1 sm:flex-initial"
               matTooltip="Copy URL">
               <mat-icon class="mr-1 sm:mr-2 !text-base">share</mat-icon>
               <span class="hidden sm:inline">Share</span>
@@ -89,7 +89,7 @@
             <button 
               mat-flat-button
               (click)="editIssue()"
-              class="!bg-slate-900 hover:!bg-slate-800 !text-white !px-3 sm:!px-4 !py-2 !text-sm flex-1 sm:flex-initial">
+              class="!bg-blue-600 hover:!bg-blue-500 !text-white !px-3 sm:!px-4 !py-2 !text-sm flex-1 sm:flex-initial !shadow-lg !shadow-blue-600/20">
               <mat-icon class="mr-1 sm:mr-2 !text-base">edit</mat-icon>
               Edit
             </button>
@@ -97,9 +97,9 @@
               mat-stroked-button
               (click)="deleteIssue()"
               [disabled]="deleting"
-              class="!border-red-200 !text-red-600 hover:!bg-red-50 !px-3 sm:!px-4 !py-2 !text-sm flex-1 sm:flex-initial"
+              class="!border-red-600 !text-red-400 hover:!bg-red-950 !px-3 sm:!px-4 !py-2 !text-sm flex-1 sm:flex-initial"
               [class.!opacity-50]="deleting">
-              <mat-spinner *ngIf="deleting" diameter="16" class="mr-1 !text-red-600"></mat-spinner>
+              <mat-spinner *ngIf="deleting" diameter="16" class="mr-1 !text-red-400"></mat-spinner>
               <mat-icon *ngIf="!deleting" class="mr-1 sm:mr-2 !text-base">delete</mat-icon>
               <span class="hidden sm:inline">{{ deleting ? 'Deleting...' : 'Delete' }}</span>
               <span class="sm:hidden">{{ deleting ? '...' : 'Delete' }}</span>
@@ -115,29 +115,29 @@
         <div class="xl:col-span-2 space-y-4 sm:space-y-6">
           
           <!-- Description Section -->
-          <div class="bg-white rounded-lg border border-slate-200 overflow-hidden shadow-sm">
-            <div class="px-4 sm:px-6 py-3 sm:py-4 border-b border-slate-200 bg-slate-50">
-              <h2 class="text-base sm:text-lg font-medium text-slate-900 flex items-center gap-2">
-                <mat-icon class="!text-lg sm:!text-xl text-slate-600">description</mat-icon>
+          <div class="bg-gray-950 rounded-lg border border-gray-800 overflow-hidden shadow-2xl">
+            <div class="px-4 sm:px-6 py-3 sm:py-4 border-b border-gray-800 bg-black">
+              <h2 class="text-base sm:text-lg font-medium text-gray-300 flex items-center gap-2">
+                <mat-icon class="!text-lg sm:!text-xl text-gray-500">description</mat-icon>
                 Description
               </h2>
             </div>
             <div class="p-4 sm:p-6">
               <div *ngIf="issue.description && issue.description.trim(); else noDescription">
-                <p class="text-slate-700 leading-relaxed whitespace-pre-wrap text-sm sm:text-base">
+                <p class="text-gray-300 leading-relaxed whitespace-pre-wrap text-sm sm:text-base">
                   {{ issue.description }}
                 </p>
               </div>
               <ng-template #noDescription>
                 <div class="text-center py-6 sm:py-8">
-                  <div class="w-12 h-12 mx-auto mb-3 bg-slate-100 rounded-full flex items-center justify-center">
-                    <mat-icon class="text-slate-400 !text-xl">description</mat-icon>
+                  <div class="w-12 h-12 mx-auto mb-3 bg-gray-900 rounded-full flex items-center justify-center">
+                    <mat-icon class="text-gray-600 !text-xl">description</mat-icon>
                   </div>
-                  <p class="text-slate-500 text-sm mb-4">No description provided</p>
+                  <p class="text-gray-500 text-sm mb-4">No description provided</p>
                   <button 
                     mat-stroked-button
                     (click)="editIssue()"
-                    class="!border-slate-200 !text-slate-700 hover:!bg-slate-50 !text-sm">
+                    class="!border-gray-800 !text-gray-400 hover:!bg-gray-900 hover:!text-gray-300 !text-sm">
                     <mat-icon class="mr-2 !text-base">edit</mat-icon>
                     Add Description
                   </button>
@@ -147,10 +147,10 @@
           </div>
 
           <!-- Activity Timeline -->
-          <div class="bg-white rounded-lg border border-slate-200 overflow-hidden shadow-sm">
-            <div class="px-4 sm:px-6 py-3 sm:py-4 border-b border-slate-200 bg-slate-50">
-              <h2 class="text-base sm:text-lg font-medium text-slate-900 flex items-center gap-2">
-                <mat-icon class="!text-lg sm:!text-xl text-slate-600">timeline</mat-icon>
+          <div class="bg-gray-950 rounded-lg border border-gray-800 overflow-hidden shadow-2xl">
+            <div class="px-4 sm:px-6 py-3 sm:py-4 border-b border-gray-800 bg-black">
+              <h2 class="text-base sm:text-lg font-medium text-gray-300 flex items-center gap-2">
+                <mat-icon class="!text-lg sm:!text-xl text-gray-500">timeline</mat-icon>
                 Activity
               </h2>
             </div>
@@ -159,29 +159,29 @@
                 
                 <!-- Created Event -->
                 <div class="flex items-start gap-3">
-                  <div class="flex-shrink-0 w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
-                    <mat-icon class="text-blue-600 !text-sm">add_circle</mat-icon>
+                  <div class="flex-shrink-0 w-8 h-8 bg-blue-950 rounded-full flex items-center justify-center">
+                    <mat-icon class="text-blue-400 !text-sm">add_circle</mat-icon>
                   </div>
                   <div class="flex-1 min-w-0">
                     <div class="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2 mb-1">
-                      <span class="text-sm font-medium text-slate-900">Issue Created</span>
-                      <span class="text-xs text-slate-500">{{ getRelativeTime(issue.created_at) }}</span>
+                      <span class="text-sm font-medium text-gray-300">Issue Created</span>
+                      <span class="text-xs text-gray-500">{{ getRelativeTime(issue.created_at) }}</span>
                     </div>
-                    <p class="text-xs sm:text-sm text-slate-600">{{ formatDate(issue.created_at) }}</p>
+                    <p class="text-xs sm:text-sm text-gray-400">{{ formatDate(issue.created_at) }}</p>
                   </div>
                 </div>
                 
                 <!-- Updated Event -->
                 <div *ngIf="issue.updated_at && issue.updated_at !== issue.created_at" class="flex items-start gap-3">
-                  <div class="flex-shrink-0 w-8 h-8 bg-orange-100 rounded-full flex items-center justify-center">
-                    <mat-icon class="text-orange-600 !text-sm">update</mat-icon>
+                  <div class="flex-shrink-0 w-8 h-8 bg-orange-950 rounded-full flex items-center justify-center">
+                    <mat-icon class="text-orange-400 !text-sm">update</mat-icon>
                   </div>
                   <div class="flex-1 min-w-0">
                     <div class="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2 mb-1">
-                      <span class="text-sm font-medium text-slate-900">Last Updated</span>
-                      <span class="text-xs text-slate-500">{{ getRelativeTime(issue.updated_at) }}</span>
+                      <span class="text-sm font-medium text-gray-300">Last Updated</span>
+                      <span class="text-xs text-gray-500">{{ getRelativeTime(issue.updated_at) }}</span>
                     </div>
-                    <p class="text-xs sm:text-sm text-slate-600">{{ formatDate(issue.updated_at) }}</p>
+                    <p class="text-xs sm:text-sm text-gray-400">{{ formatDate(issue.updated_at) }}</p>
                   </div>
                 </div>
               </div>
@@ -193,10 +193,10 @@
         <div class="space-y-4 sm:space-y-6">
           
           <!-- Issue Metadata -->
-          <div class="bg-white rounded-lg border border-slate-200 overflow-hidden shadow-sm">
-            <div class="px-4 sm:px-6 py-3 sm:py-4 border-b border-slate-200 bg-slate-50">
-              <h2 class="text-base sm:text-lg font-medium text-slate-900 flex items-center gap-2">
-                <mat-icon class="!text-lg sm:!text-xl text-slate-600">info</mat-icon>
+          <div class="bg-gray-950 rounded-lg border border-gray-800 overflow-hidden shadow-2xl">
+            <div class="px-4 sm:px-6 py-3 sm:py-4 border-b border-gray-800 bg-black">
+              <h2 class="text-base sm:text-lg font-medium text-gray-300 flex items-center gap-2">
+                <mat-icon class="!text-lg sm:!text-xl text-gray-500">info</mat-icon>
                 Details
               </h2>
             </div>
@@ -204,10 +204,10 @@
               <div class="space-y-4">
                 
                 <!-- Status -->
-                <div class="flex items-center justify-between py-2 border-b border-slate-100">
+                <div class="flex items-center justify-between py-2 border-b border-gray-800">
                   <div class="flex items-center gap-2">
-                    <mat-icon class="text-slate-400 !text-base">flag</mat-icon>
-                    <span class="text-sm font-medium text-slate-700">Status</span>
+                    <mat-icon class="text-gray-600 !text-base">flag</mat-icon>
+                    <span class="text-sm font-medium text-gray-400">Status</span>
                   </div>
                   <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium"
                         [ngClass]="getStatusClasses(issue.status)">
@@ -216,10 +216,10 @@
                 </div>
 
                 <!-- Priority -->
-                <div class="flex items-center justify-between py-2 border-b border-slate-100">
+                <div class="flex items-center justify-between py-2 border-b border-gray-800">
                   <div class="flex items-center gap-2">
-                    <mat-icon class="text-slate-400 !text-base">priority_high</mat-icon>
-                    <span class="text-sm font-medium text-slate-700">Priority</span>
+                    <mat-icon class="text-gray-600 !text-base">priority_high</mat-icon>
+                    <span class="text-sm font-medium text-gray-400">Priority</span>
                   </div>
                   <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium"
                         [ngClass]="getPriorityClasses(issue.priority)">
@@ -228,38 +228,38 @@
                 </div>
 
                 <!-- Assignee -->
-                <div class="flex items-center justify-between py-2 border-b border-slate-100">
+                <div class="flex items-center justify-between py-2 border-b border-gray-800">
                   <div class="flex items-center gap-2">
-                    <mat-icon class="text-slate-400 !text-base">person</mat-icon>
-                    <span class="text-sm font-medium text-slate-700">Assignee</span>
+                    <mat-icon class="text-gray-600 !text-base">person</mat-icon>
+                    <span class="text-sm font-medium text-gray-400">Assignee</span>
                   </div>
                   <div class="text-right">
                     <div *ngIf="issue.assignee && issue.assignee.trim(); else unassigned" class="flex items-center gap-2">
-                      <mat-icon class="text-slate-500 !text-base">account_circle</mat-icon>
-                      <span class="text-sm text-slate-700">{{ issue.assignee }}</span>
+                      <mat-icon class="text-gray-500 !text-base">account_circle</mat-icon>
+                      <span class="text-sm text-gray-300">{{ issue.assignee }}</span>
                     </div>
                     <ng-template #unassigned>
-                      <span class="text-sm text-slate-400">Unassigned</span>
+                      <span class="text-sm text-gray-600">Unassigned</span>
                     </ng-template>
                   </div>
                 </div>
 
                 <!-- Created Date -->
-                <div class="flex items-center justify-between py-2 border-b border-slate-100">
+                <div class="flex items-center justify-between py-2 border-b border-gray-800">
                   <div class="flex items-center gap-2">
-                    <mat-icon class="text-slate-400 !text-base">schedule</mat-icon>
-                    <span class="text-sm font-medium text-slate-700">Created</span>
+                    <mat-icon class="text-gray-600 !text-base">schedule</mat-icon>
+                    <span class="text-sm font-medium text-gray-400">Created</span>
                   </div>
-                  <span class="text-sm text-slate-600">{{ formatDate(issue.created_at) }}</span>
+                  <span class="text-sm text-gray-400">{{ formatDate(issue.created_at) }}</span>
                 </div>
 
                 <!-- Issue ID -->
                 <div class="flex items-center justify-between py-2">
                   <div class="flex items-center gap-2">
-                    <mat-icon class="text-slate-400 !text-base">tag</mat-icon>
-                    <span class="text-sm font-medium text-slate-700">ID</span>
+                    <mat-icon class="text-gray-600 !text-base">tag</mat-icon>
+                    <span class="text-sm font-medium text-gray-400">ID</span>
                   </div>
-                  <code class="bg-slate-100 text-slate-700 px-2 py-1 rounded text-xs font-mono select-all">
+                  <code class="bg-gray-900 text-gray-300 px-2 py-1 rounded text-xs font-mono select-all">
                     {{ issue.id }}
                   </code>
                 </div>
@@ -268,24 +268,24 @@
           </div>
 
           <!-- JSON Data Section -->
-          <div class="bg-white rounded-lg border border-slate-200 overflow-hidden shadow-sm">
-            <div class="px-4 sm:px-6 py-3 sm:py-4 border-b border-slate-200 bg-slate-50">
+          <div class="bg-gray-950 rounded-lg border border-gray-800 overflow-hidden shadow-2xl">
+            <div class="px-4 sm:px-6 py-3 sm:py-4 border-b border-gray-800 bg-black">
               <div class="flex items-center justify-between">
-                <h2 class="text-base sm:text-lg font-medium text-slate-900 flex items-center gap-2">
-                  <mat-icon class="!text-lg sm:!text-xl text-slate-600">code</mat-icon>
+                <h2 class="text-base sm:text-lg font-medium text-gray-300 flex items-center gap-2">
+                  <mat-icon class="!text-lg sm:!text-xl text-gray-500">code</mat-icon>
                   Raw Data
                 </h2>
                 <button 
                   mat-icon-button
                   (click)="copyJsonToClipboard()"
-                  class="!text-slate-500 hover:!bg-slate-100 !w-8 !h-8"
+                  class="!text-gray-500 hover:!bg-gray-900 !w-8 !h-8"
                   matTooltip="Copy JSON">
                   <mat-icon class="!text-base">content_copy</mat-icon>
                 </button>
               </div>
             </div>
             <div class="p-0">
-              <pre class="bg-slate-900 text-green-400 p-4 sm:p-6 m-0 text-xs sm:text-sm font-mono leading-relaxed overflow-x-auto max-h-60 sm:max-h-80 overflow-y-auto border-0 whitespace-pre-wrap break-all sm:break-normal">{{ getFormattedJson() }}</pre>
+              <pre class="bg-black text-green-400 p-4 sm:p-6 m-0 text-xs sm:text-sm font-mono leading-relaxed overflow-x-auto max-h-60 sm:max-h-80 overflow-y-auto border-0 whitespace-pre-wrap break-all sm:break-normal">{{ getFormattedJson() }}</pre>
             </div>
           </div>
         </div>
