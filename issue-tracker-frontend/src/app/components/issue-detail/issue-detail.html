@@ -206,7 +206,7 @@
                 <!-- Status -->
                 <div class="flex items-center justify-between py-2 border-b border-gray-800">
                   <div class="flex items-center gap-2">
-                    <mat-icon class="text-gray-600 !text-base">flag</mat-icon>
+                    <mat-icon class="text-gray-400 !text-base">flag</mat-icon>
                     <span class="text-sm font-medium text-gray-400">Status</span>
                   </div>
                   <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium"
@@ -218,7 +218,7 @@
                 <!-- Priority -->
                 <div class="flex items-center justify-between py-2 border-b border-gray-800">
                   <div class="flex items-center gap-2">
-                    <mat-icon class="text-gray-600 !text-base">priority_high</mat-icon>
+                    <mat-icon class="text-gray-400 !text-base">priority_high</mat-icon>
                     <span class="text-sm font-medium text-gray-400">Priority</span>
                   </div>
                   <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium"
@@ -230,12 +230,12 @@
                 <!-- Assignee -->
                 <div class="flex items-center justify-between py-2 border-b border-gray-800">
                   <div class="flex items-center gap-2">
-                    <mat-icon class="text-gray-600 !text-base">person</mat-icon>
+                    <mat-icon class="text-gray-400 !text-base">person</mat-icon>
                     <span class="text-sm font-medium text-gray-400">Assignee</span>
                   </div>
                   <div class="text-right">
                     <div *ngIf="issue.assignee && issue.assignee.trim(); else unassigned" class="flex items-center gap-2">
-                      <mat-icon class="text-gray-500 !text-base">account_circle</mat-icon>
+                      <mat-icon class="text-gray-400 !text-base">account_circle</mat-icon>
                       <span class="text-sm text-gray-300">{{ issue.assignee }}</span>
                     </div>
                     <ng-template #unassigned>
@@ -285,7 +285,7 @@
               </div>
             </div>
             <div class="p-0">
-              <pre class="bg-black text-green-400 p-4 sm:p-6 m-0 text-xs sm:text-sm font-mono leading-relaxed overflow-x-auto max-h-60 sm:max-h-80 overflow-y-auto border-0 whitespace-pre-wrap break-all sm:break-normal">{{ getFormattedJson() }}</pre>
+              <pre class="bg-black text-cyan-400 p-4 sm:p-6 m-0 text-xs sm:text-sm font-mono leading-relaxed overflow-x-auto max-h-60 sm:max-h-80 overflow-y-auto border-0 whitespace-pre-wrap break-all sm:break-normal">{{ getFormattedJson() }}</pre>
             </div>
           </div>
         </div>
