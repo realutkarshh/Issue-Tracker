@@ -58,7 +58,8 @@ export class IssueFormComponent implements OnInit {
   statusOptions = [
     { value: IssueStatus.OPEN, label: 'Open', icon: 'radio_button_unchecked', color: 'text-blue-600' },
     { value: IssueStatus.IN_PROGRESS, label: 'In Progress', icon: 'schedule', color: 'text-purple-600' },
-    { value: IssueStatus.CLOSED, label: 'Closed', icon: 'check_circle', color: 'text-green-600' }
+    { value: IssueStatus.RESOLVED, label: 'Resolved', icon: 'schedule', color: 'text-green-600' },
+    { value: IssueStatus.CLOSED, label: 'Closed', icon: 'check_circle', color: 'text-gray-600' }
   ];
 
   priorityOptions = [

@@ -12,7 +12,8 @@ export interface Issue {
 
 export enum IssueStatus {
   OPEN = 'open',
-  IN_PROGRESS = 'in_progress', 
+  IN_PROGRESS = 'in_progress',
+  RESOLVED = 'resolved', 
   CLOSED = 'closed'
 }
 

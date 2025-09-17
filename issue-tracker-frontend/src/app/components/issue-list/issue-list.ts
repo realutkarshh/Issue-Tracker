@@ -249,27 +249,50 @@ extractAssigneeOptions(): void {
     this.loadAllIssues();
   }
 
-  getStatusStyles(status: string): any {
+  // In your issue-list.ts file, add these methods to the IssueListComponent class:
+
+getStatusClasses(status: string): string {
+  const statusMap: { [key: string]: string } = {
+    'open': 'bg-orange-900/90 text-orange-200 border-orange-700/60',
+    'in-progress': 'bg-blue-900/90 text-blue-200 border-blue-700/60', 
+    'resolved': 'bg-green-900/90 text-green-200 border-green-700/60',
+    'closed': 'bg-gray-800/90 text-gray-300 border-gray-600/60'
+  };
+  return statusMap[status?.toLowerCase()] || 'bg-gray-800/70 text-gray-400 border-gray-600/40';
+}
+
+getPriorityClasses(priority: string): string {
+  const priorityMap: { [key: string]: string } = {
+    'critical': 'bg-red-900/95 text-red-200 border-red-700/70',
+    'high': 'bg-red-900/90 text-red-200 border-red-700/60',
+    'medium': 'bg-orange-900/90 text-orange-200 border-orange-700/60',
+    'low': 'bg-gray-800/90 text-gray-300 border-gray-600/60'
+  };
+  return priorityMap[priority?.toLowerCase()] || 'bg-gray-800/70 text-gray-400 border-gray-600/40';
+}
+
+// If you want to use the style versions instead, add these:
+getStatusStyles(status: string): any {
   const statusMap: { [key: string]: any } = {
     'open': {
-      'background-color': 'rgb(124 45 18 / 0.9)', // Orange-900/90
-      'color': 'rgb(254 215 170)', // Orange-200
-      'border-color': 'rgb(194 65 12 / 0.6)' // Orange-700/60
+      'background-color': 'rgb(124 45 18 / 0.9)',
+      'color': 'rgb(254 215 170)',
+      'border-color': 'rgb(194 65 12 / 0.6)'
     },
     'in-progress': {
-      'background-color': 'rgb(30 58 138 / 0.9)', // Blue-900/90
-      'color': 'rgb(191 219 254)', // Blue-200
-      'border-color': 'rgb(29 78 216 / 0.6)' // Blue-700/60
+      'background-color': 'rgb(30 58 138 / 0.9)',
+      'color': 'rgb(191 219 254)',
+      'border-color': 'rgb(29 78 216 / 0.6)'
     },
     'resolved': {
-      'background-color': 'rgb(20 83 45 / 0.9)', // Green-900/90
-      'color': 'rgb(187 247 208)', // Green-200
-      'border-color': 'rgb(21 128 61 / 0.6)' // Green-700/60
+      'background-color': 'rgb(20 83 45 / 0.9)',
+      'color': 'rgb(187 247 208)',
+      'border-color': 'rgb(21 128 61 / 0.6)'
     },
     'closed': {
-      'background-color': 'rgb(31 41 55 / 0.9)', // Gray-800/90
-      'color': 'rgb(209 213 219)', // Gray-300
-      'border-color': 'rgb(75 85 99 / 0.6)' // Gray-600/60
+      'background-color': 'rgb(31 41 55 / 0.9)',
+      'color': 'rgb(209 213 219)',
+      'border-color': 'rgb(75 85 99 / 0.6)'
     }
   };
   return statusMap[status?.toLowerCase()] || {
@@ -282,24 +305,24 @@ extractAssigneeOptions(): void {
 getPriorityStyles(priority: string): any {
   const priorityMap: { [key: string]: any } = {
     'critical': {
-      'background-color': 'rgb(127 29 29 / 0.95)', // Red-900/95
-      'color': 'rgb(254 202 202)', // Red-200
-      'border-color': 'rgb(185 28 28 / 0.7)' // Red-700/70
+      'background-color': 'rgb(127 29 29 / 0.95)',
+      'color': 'rgb(254 202 202)',
+      'border-color': 'rgb(185 28 28 / 0.7)'
     },
     'high': {
-      'background-color': 'rgb(127 29 29 / 0.9)', // Red-900/90
-      'color': 'rgb(254 202 202)', // Red-200
-      'border-color': 'rgb(185 28 28 / 0.6)' // Red-700/60
+      'background-color': 'rgb(127 29 29 / 0.9)',
+      'color': 'rgb(254 202 202)',
+      'border-color': 'rgb(185 28 28 / 0.6)'
     },
     'medium': {
-      'background-color': 'rgb(124 45 18 / 0.9)', // Orange-900/90
-      'color': 'rgb(254 215 170)', // Orange-200
-      'border-color': 'rgb(194 65 12 / 0.6)' // Orange-700/60
+      'background-color': 'rgb(124 45 18 / 0.9)',
+      'color': 'rgb(254 215 170)',
+      'border-color': 'rgb(194 65 12 / 0.6)'
     },
     'low': {
-      'background-color': 'rgb(31 41 55 / 0.9)', // Gray-800/90
-      'color': 'rgb(209 213 219)', // Gray-300
-      'border-color': 'rgb(75 85 99 / 0.6)' // Gray-600/60
+      'background-color': 'rgb(31 41 55 / 0.9)',
+      'color': 'rgb(209 213 219)',
+      'border-color': 'rgb(75 85 99 / 0.6)'
     }
   };
   return priorityMap[priority?.toLowerCase()] || {
@@ -308,6 +331,8 @@ getPriorityStyles(priority: string): any {
     'border-color': 'rgb(75 85 99 / 0.4)'
   };
 }
+
+
 
 
   // Navigation methods
