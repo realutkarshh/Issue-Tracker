@@ -60,6 +60,8 @@ def issue_helper(issue_doc: dict) -> dict:
 # API ROUTES
 # ================================
 
+
+#Root API (METHOD: GET) - To get the status about the working of the API
 @app.get("/")
 async def root():
     """Root endpoint - API information"""
@@ -71,6 +73,7 @@ async def root():
         "database": "MongoDB Atlas"
     }
 
+#"/health" (METHOD: GET) - To get the health of the server. Returns 'healthy' when working and 'unhealthy' if connection with database fails
 @app.get("/health")
 async def health_check():
     """Health check endpoint with database status"""
@@ -97,6 +100,8 @@ async def health_check():
             "timestamp": datetime.utcnow().isoformat() + "Z"
         }
 
+
+#"/issues" (METHOD: GET) - To get all the issues from the database
 @app.get("/issues/", response_model=List[Issue])
 async def get_all_issues():
     """Get all issues from MongoDB Atlas"""
@@ -121,6 +126,8 @@ async def get_all_issues():
         print(f"❌ Error fetching issues: {e}")
         raise HTTPException(status_code=500, detail=f"Failed to fetch issues: {str(e)}")
 
+
+# "/issues/{issue_id} (METHOD: GET) - To get a specific issue from the database."
 @app.get("/issues/{issue_id}", response_model=Issue)
 async def get_issue_by_id(issue_id: str):
     """Get a specific issue by ID"""
@@ -143,6 +150,8 @@ async def get_issue_by_id(issue_id: str):
         print(f"❌ Error fetching issue {issue_id}: {e}")
         raise HTTPException(status_code=500, detail=f"Failed to fetch issue: {str(e)}")
 
+
+# "/issues" (METHOD: POST) - To create a new issue into the database
 @app.post("/issues/", response_model=Issue)
 async def create_issue(issue_request: CreateIssueRequest):
     """Create a new issue in MongoDB Atlas"""
@@ -182,6 +191,8 @@ async def create_issue(issue_request: CreateIssueRequest):
         print(f"❌ Error creating issue: {e}")
         raise HTTPException(status_code=500, detail=f"Failed to create issue: {str(e)}")
 
+
+# "/issues/{issue_id}" (METHOD:PUT) - To update an existing issue using the issue id
 @app.put("/issues/{issue_id}", response_model=Issue)
 async def update_issue(issue_id: str, issue_request: UpdateIssueRequest):
     """Update an existing issue in MongoDB Atlas"""
@@ -219,6 +230,8 @@ async def update_issue(issue_id: str, issue_request: UpdateIssueRequest):
         print(f"❌ Error updating issue {issue_id}: {e}")
         raise HTTPException(status_code=500, detail=f"Failed to update issue: {str(e)}")
 
+
+# "/issues/{issue_id} (METHOD:DELETE) - To delete an existing issue in the database. "
 @app.delete("/issues/{issue_id}")
 async def delete_issue(issue_id: str):
     """Delete an issue from MongoDB Atlas"""
