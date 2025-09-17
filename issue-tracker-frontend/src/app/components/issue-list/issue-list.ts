@@ -65,7 +65,7 @@ export class IssueListComponent implements OnInit, AfterViewInit {
 
   // Filter options
   statusOptions: string[] = ['open', 'in-progress', 'resolved', 'closed'];
-  priorityOptions: string[] = ['low', 'medium', 'high'];
+  priorityOptions: string[] = ['low', 'medium', 'high','critical'];
   assigneeOptions: string[] = [];
 
   // Pagination settings
@@ -249,24 +249,66 @@ extractAssigneeOptions(): void {
     this.loadAllIssues();
   }
 
-  getStatusClasses(status: string): string {
-    const statusMap: { [key: string]: string } = {
-      'open': 'bg-orange-100 text-orange-800 border border-orange-200',
-      'in-progress': 'bg-blue-100 text-blue-800 border border-blue-200', 
-      'resolved': 'bg-green-100 text-green-800 border border-green-200',
-      'closed': 'bg-slate-100 text-slate-600 border border-slate-200'
-    };
-    return statusMap[status?.toLowerCase()] || 'bg-slate-100 text-slate-600 border border-slate-200';
-  }
+  getStatusStyles(status: string): any {
+  const statusMap: { [key: string]: any } = {
+    'open': {
+      'background-color': 'rgb(124 45 18 / 0.9)', // Orange-900/90
+      'color': 'rgb(254 215 170)', // Orange-200
+      'border-color': 'rgb(194 65 12 / 0.6)' // Orange-700/60
+    },
+    'in-progress': {
+      'background-color': 'rgb(30 58 138 / 0.9)', // Blue-900/90
+      'color': 'rgb(191 219 254)', // Blue-200
+      'border-color': 'rgb(29 78 216 / 0.6)' // Blue-700/60
+    },
+    'resolved': {
+      'background-color': 'rgb(20 83 45 / 0.9)', // Green-900/90
+      'color': 'rgb(187 247 208)', // Green-200
+      'border-color': 'rgb(21 128 61 / 0.6)' // Green-700/60
+    },
+    'closed': {
+      'background-color': 'rgb(31 41 55 / 0.9)', // Gray-800/90
+      'color': 'rgb(209 213 219)', // Gray-300
+      'border-color': 'rgb(75 85 99 / 0.6)' // Gray-600/60
+    }
+  };
+  return statusMap[status?.toLowerCase()] || {
+    'background-color': 'rgb(31 41 55 / 0.7)',
+    'color': 'rgb(156 163 175)',
+    'border-color': 'rgb(75 85 99 / 0.4)'
+  };
+}
 
-  getPriorityClasses(priority: string): string {
-    const priorityMap: { [key: string]: string } = {
-      'high': 'bg-red-100 text-red-800 border border-red-200',
-      'medium': 'bg-orange-100 text-orange-800 border border-orange-200',
-      'low': 'bg-slate-100 text-slate-600 border border-slate-200'
-    };
-    return priorityMap[priority?.toLowerCase()] || 'bg-slate-100 text-slate-600 border border-slate-200';
-  }
+getPriorityStyles(priority: string): any {
+  const priorityMap: { [key: string]: any } = {
+    'critical': {
+      'background-color': 'rgb(127 29 29 / 0.95)', // Red-900/95
+      'color': 'rgb(254 202 202)', // Red-200
+      'border-color': 'rgb(185 28 28 / 0.7)' // Red-700/70
+    },
+    'high': {
+      'background-color': 'rgb(127 29 29 / 0.9)', // Red-900/90
+      'color': 'rgb(254 202 202)', // Red-200
+      'border-color': 'rgb(185 28 28 / 0.6)' // Red-700/60
+    },
+    'medium': {
+      'background-color': 'rgb(124 45 18 / 0.9)', // Orange-900/90
+      'color': 'rgb(254 215 170)', // Orange-200
+      'border-color': 'rgb(194 65 12 / 0.6)' // Orange-700/60
+    },
+    'low': {
+      'background-color': 'rgb(31 41 55 / 0.9)', // Gray-800/90
+      'color': 'rgb(209 213 219)', // Gray-300
+      'border-color': 'rgb(75 85 99 / 0.6)' // Gray-600/60
+    }
+  };
+  return priorityMap[priority?.toLowerCase()] || {
+    'background-color': 'rgb(31 41 55 / 0.7)',
+    'color': 'rgb(156 163 175)',
+    'border-color': 'rgb(75 85 99 / 0.4)'
+  };
+}
+
 
   // Navigation methods
   viewIssue(issue: Issue): void {
