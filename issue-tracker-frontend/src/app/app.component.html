@@ -18,76 +18,7 @@
             <p class="text-xs text-gray-500 font-medium leading-tight">Project Management System</p>
           </div>
         </div>
-        
-        <!-- Enhanced Desktop Navigation -->
-        <nav class="hidden md:flex items-center gap-2">
-          <a 
-            mat-button
-            routerLink="/issues" 
-            routerLinkActive="!bg-blue-950/50 !text-blue-400 !shadow-lg !shadow-blue-500/10"
-            class="group relative flex items-center gap-2 px-4 py-2.5 rounded-xl text-gray-400 hover:bg-gray-800/70 hover:text-gray-200 transition-all duration-200 font-medium">
-            <mat-icon class="!text-xl !leading-none group-hover:scale-110 transition-transform">list</mat-icon>
-            <span class="text-sm font-medium">All Issues</span>
-            <div class="absolute inset-x-0 -bottom-0.5 h-0.5 bg-blue-500 scale-x-0 group-hover:scale-x-100 transition-transform origin-left"></div>
-          </a>
-          
-          <a 
-            mat-raised-button 
-            routerLink="/create"
-            class="group relative inline-flex items-center gap-2 px-6 py-2.5 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white rounded-xl shadow-lg hover:shadow-xl hover:shadow-blue-500/25 transition-all duration-200 font-semibold text-sm active:scale-95">
-            <mat-icon class="!text-xl !leading-none group-hover:rotate-90 transition-transform duration-300">add</mat-icon>
-            <span class="font-semibold">Create Issue</span>
-          </a>
-        </nav>
-
-        <!-- Enhanced Mobile Menu Button -->
-        <button 
-          mat-icon-button 
-          class="md:hidden relative p-2 text-gray-400 hover:text-gray-200 hover:bg-gray-800/70 rounded-xl transition-all duration-200"
-          [matMenuTriggerFor]="mobileMenu">
-          <mat-icon class="!text-2xl !leading-none">menu</mat-icon>
-        </button>
-        
-        <!-- Improved Mobile Menu -->
-        <mat-menu #mobileMenu="matMenu" class="mt-2 w-56 !bg-gray-900 !border-gray-800">
-          <div class="px-4 py-3 bg-gradient-to-r from-blue-950/50 to-blue-900/50 border-b border-blue-800/50">
-            <div class="flex items-center gap-3">
-              <div class="w-8 h-8 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg flex items-center justify-center shadow-lg">
-                <mat-icon class="text-white !text-base !leading-none">bug_report</mat-icon>
-              </div>
-              <div>
-                <p class="text-sm font-semibold text-gray-200 leading-tight">{{ title }}</p>
-                <p class="text-xs text-gray-400 leading-tight">Project Management</p>
-              </div>
-            </div>
-          </div>
-          
-          <a 
-            mat-menu-item 
-            routerLink="/issues"
-            class="group flex items-center gap-3 px-4 py-3 hover:bg-gray-800/50 transition-colors !text-gray-300">
-            <div class="w-8 h-8 bg-gray-800 group-hover:bg-blue-950/70 rounded-lg flex items-center justify-center transition-colors">
-              <mat-icon class="text-gray-400 group-hover:text-blue-400 !text-lg !leading-none">list</mat-icon>
-            </div>
-            <div>
-              <span class="text-sm font-medium text-gray-200 leading-tight">All Issues</span>
-              <p class="text-xs text-gray-500 leading-tight">View and manage issues</p>
-            </div>
-          </a>
-          
-          <a 
-            mat-menu-item 
-            routerLink="/create"
-            class="group flex items-center gap-3 px-4 py-3 hover:bg-blue-950/30 transition-colors !text-gray-300">
-            <div class="w-8 h-8 bg-blue-950/70 group-hover:bg-blue-900/70 rounded-lg flex items-center justify-center transition-colors">
-              <mat-icon class="text-blue-400 group-hover:text-blue-300 !text-lg !leading-none">add</mat-icon>
-            </div>
-            <div>
-              <span class="text-sm font-medium text-gray-200 leading-tight">Create Issue</span>
-              <p class="text-xs text-gray-500 leading-tight">Add new issue</p>
-            </div>
-          </a>
-        </mat-menu>
+       
       </div>
     </div>
     
