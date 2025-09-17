@@ -13,7 +13,7 @@ import { MatSnackBarModule, MatSnackBar } from '@angular/material/snack-bar';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
-import { MatPaginatorModule, MatPaginator } from '@angular/material/paginator';
+import { MatPaginatorModule, MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatSortModule, MatSort } from '@angular/material/sort';
 import { MatTooltipModule } from '@angular/material/tooltip';
 
@@ -45,7 +45,7 @@ import { Issue, IssueStatus, IssuePriority } from '../../models/issue';
   templateUrl: './issue-list.html'
 })
 export class IssueListComponent implements OnInit, AfterViewInit {
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
+  @ViewChild('paginator') paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
   // Table configuration
@@ -65,11 +65,11 @@ export class IssueListComponent implements OnInit, AfterViewInit {
 
   // Filter options
   statusOptions: string[] = ['open', 'in-progress', 'resolved', 'closed'];
-  priorityOptions: string[] = ['low', 'medium', 'high','critical'];
+  priorityOptions: string[] = ['low', 'medium', 'high', 'critical'];
   assigneeOptions: string[] = [];
 
-  // Pagination settings
-  pageSize = 10;
+  // Pagination settings - simplified to work with Mat-Paginator
+  pageSize = 5;
   pageSizeOptions = [5, 10, 25, 50];
   totalIssues = 0;
 
@@ -88,6 +88,7 @@ export class IssueListComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
+    // Connect paginator and sort to data source
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
     
@@ -152,14 +153,13 @@ export class IssueListComponent implements OnInit, AfterViewInit {
   }
 
   // Extract unique assignees from issues
-// Extract unique assignees from issues
-extractAssigneeOptions(): void {
-  const assignees = this.issues
-    .map(issue => issue.assignee)
-    .filter((assignee): assignee is string => assignee !== null && assignee !== undefined);
-  
-  this.assigneeOptions = Array.from(new Set(assignees));
-}
+  extractAssigneeOptions(): void {
+    const assignees = this.issues
+      .map(issue => issue.assignee)
+      .filter((assignee): assignee is string => assignee !== null && assignee !== undefined);
+    
+    this.assigneeOptions = Array.from(new Set(assignees));
+  }
 
   // Create custom filter predicate
   createFilter(): (data: Issue, filter: string) => boolean {
@@ -212,7 +212,8 @@ extractAssigneeOptions(): void {
     };
 
     this.dataSource.filter = JSON.stringify(filterValue);
-
+    
+    // Reset pagination to first page when filters change
     if (this.dataSource.paginator) {
       this.dataSource.paginator.firstPage();
     }
@@ -226,6 +227,11 @@ extractAssigneeOptions(): void {
     this.assigneeFilter.setValue('');
     
     this.dataSource.filter = '';
+    
+    // Reset pagination
+    if (this.dataSource.paginator) {
+      this.dataSource.paginator.firstPage();
+    }
   }
 
   // Check if any filters are active
@@ -243,97 +249,127 @@ extractAssigneeOptions(): void {
     return this.dataSource.filteredData.length;
   }
 
+  // Get current page items count for display in filter summary
+  getCurrentPageItems(): string {
+    if (!this.dataSource.paginator) return '0';
+    
+    const filteredData = this.dataSource.filteredData;
+    const startIndex = this.dataSource.paginator.pageIndex * this.dataSource.paginator.pageSize;
+    const endIndex = Math.min(startIndex + this.dataSource.paginator.pageSize, filteredData.length);
+    const actualDisplayed = Math.max(0, endIndex - startIndex);
+    
+    if (filteredData.length === 0) return '0';
+    return `${startIndex + 1}-${startIndex + actualDisplayed}`;
+  }
+
+  // Get paginated data specifically for mobile view
+  getPaginatedMobileData(): Issue[] {
+    if (!this.dataSource.paginator) {
+      return this.dataSource.filteredData.slice(0, this.pageSize);
+    }
+    
+    const startIndex = this.dataSource.paginator.pageIndex * this.dataSource.paginator.pageSize;
+    const endIndex = startIndex + this.dataSource.paginator.pageSize;
+    return this.dataSource.filteredData.slice(startIndex, endIndex);
+  }
+
+  // Handle pagination changes (for additional custom logic if needed)
+  onPageChange(event: PageEvent): void {
+    // MatPaginator handles the pagination automatically
+    // This method can be used for additional custom logic
+    console.log('📄 Page changed:', event);
+  }
+
   // Refresh issues
   refreshIssues(): void {
     console.log('🔄 Refreshing issues');
     this.loadAllIssues();
   }
 
-  // In your issue-list.ts file, add these methods to the IssueListComponent class:
+  // === STATUS AND PRIORITY STYLING FUNCTIONS ===
 
-getStatusClasses(status: string): string {
-  const statusMap: { [key: string]: string } = {
-    'open': 'bg-orange-900/90 text-orange-200 border-orange-700/60',
-    'in-progress': 'bg-blue-900/90 text-blue-200 border-blue-700/60', 
-    'resolved': 'bg-green-900/90 text-green-200 border-green-700/60',
-    'closed': 'bg-gray-800/90 text-gray-300 border-gray-600/60'
-  };
-  return statusMap[status?.toLowerCase()] || 'bg-gray-800/70 text-gray-400 border-gray-600/40';
-}
+  getStatusClasses(status: string): string {
+    const statusMap: { [key: string]: string } = {
+      'open': 'bg-orange-900/90 text-orange-200 border-orange-700/60',
+      'in-progress': 'bg-blue-900/90 text-blue-200 border-blue-700/60', 
+      'resolved': 'bg-green-900/90 text-green-200 border-green-700/60',
+      'closed': 'bg-gray-800/90 text-gray-300 border-gray-600/60'
+    };
+    return statusMap[status?.toLowerCase()] || 'bg-gray-800/70 text-gray-400 border-gray-600/40';
+  }
 
-getPriorityClasses(priority: string): string {
-  const priorityMap: { [key: string]: string } = {
-    'critical': 'bg-red-900/95 text-red-200 border-red-700/70',
-    'high': 'bg-red-900/90 text-red-200 border-red-700/60',
-    'medium': 'bg-orange-900/90 text-orange-200 border-orange-700/60',
-    'low': 'bg-gray-800/90 text-gray-300 border-gray-600/60'
-  };
-  return priorityMap[priority?.toLowerCase()] || 'bg-gray-800/70 text-gray-400 border-gray-600/40';
-}
+  getPriorityClasses(priority: string): string {
+    const priorityMap: { [key: string]: string } = {
+      'critical': 'bg-red-900/95 text-red-200 border-red-700/70',
+      'high': 'bg-red-900/90 text-red-200 border-red-700/60',
+      'medium': 'bg-orange-900/90 text-orange-200 border-orange-700/60',
+      'low': 'bg-gray-800/90 text-gray-300 border-gray-600/60'
+    };
+    return priorityMap[priority?.toLowerCase()] || 'bg-gray-800/70 text-gray-400 border-gray-600/40';
+  }
 
-// If you want to use the style versions instead, add these:
-getStatusStyles(status: string): any {
-  const statusMap: { [key: string]: any } = {
-    'open': {
-      'background-color': 'rgb(124 45 18 / 0.9)',
-      'color': 'rgb(254 215 170)',
-      'border-color': 'rgb(194 65 12 / 0.6)'
-    },
-    'in-progress': {
-      'background-color': 'rgb(30 58 138 / 0.9)',
-      'color': 'rgb(191 219 254)',
-      'border-color': 'rgb(29 78 216 / 0.6)'
-    },
-    'resolved': {
-      'background-color': 'rgb(20 83 45 / 0.9)',
-      'color': 'rgb(187 247 208)',
-      'border-color': 'rgb(21 128 61 / 0.6)'
-    },
-    'closed': {
-      'background-color': 'rgb(31 41 55 / 0.9)',
-      'color': 'rgb(209 213 219)',
-      'border-color': 'rgb(75 85 99 / 0.6)'
-    }
-  };
-  return statusMap[status?.toLowerCase()] || {
-    'background-color': 'rgb(31 41 55 / 0.7)',
-    'color': 'rgb(156 163 175)',
-    'border-color': 'rgb(75 85 99 / 0.4)'
-  };
-}
+  // Inline styles versions (for better compatibility)
+  getStatusStyles(status: string): any {
+    const statusMap: { [key: string]: any } = {
+      'open': {
+        'background-color': 'rgb(124 45 18 / 0.9)',
+        'color': 'rgb(254 215 170)',
+        'border-color': 'rgb(194 65 12 / 0.6)'
+      },
+      'in-progress': {
+        'background-color': 'rgb(30 58 138 / 0.9)',
+        'color': 'rgb(191 219 254)',
+        'border-color': 'rgb(29 78 216 / 0.6)'
+      },
+      'resolved': {
+        'background-color': 'rgb(20 83 45 / 0.9)',
+        'color': 'rgb(187 247 208)',
+        'border-color': 'rgb(21 128 61 / 0.6)'
+      },
+      'closed': {
+        'background-color': 'rgb(31 41 55 / 0.9)',
+        'color': 'rgb(209 213 219)',
+        'border-color': 'rgb(75 85 99 / 0.6)'
+      }
+    };
+    return statusMap[status?.toLowerCase()] || {
+      'background-color': 'rgb(31 41 55 / 0.7)',
+      'color': 'rgb(156 163 175)',
+      'border-color': 'rgb(75 85 99 / 0.4)'
+    };
+  }
 
-getPriorityStyles(priority: string): any {
-  const priorityMap: { [key: string]: any } = {
-    'critical': {
-      'background-color': 'rgb(127 29 29 / 0.95)',
-      'color': 'rgb(254 202 202)',
-      'border-color': 'rgb(185 28 28 / 0.7)'
-    },
-    'high': {
-      'background-color': 'rgb(127 29 29 / 0.9)',
-      'color': 'rgb(254 202 202)',
-      'border-color': 'rgb(185 28 28 / 0.6)'
-    },
-    'medium': {
-      'background-color': 'rgb(124 45 18 / 0.9)',
-      'color': 'rgb(254 215 170)',
-      'border-color': 'rgb(194 65 12 / 0.6)'
-    },
-    'low': {
-      'background-color': 'rgb(31 41 55 / 0.9)',
-      'color': 'rgb(209 213 219)',
-      'border-color': 'rgb(75 85 99 / 0.6)'
-    }
-  };
-  return priorityMap[priority?.toLowerCase()] || {
-    'background-color': 'rgb(31 41 55 / 0.7)',
-    'color': 'rgb(156 163 175)',
-    'border-color': 'rgb(75 85 99 / 0.4)'
-  };
-}
+  getPriorityStyles(priority: string): any {
+    const priorityMap: { [key: string]: any } = {
+      'critical': {
+        'background-color': 'rgb(127 29 29 / 0.95)',
+        'color': 'rgb(254 202 202)',
+        'border-color': 'rgb(185 28 28 / 0.7)'
+      },
+      'high': {
+        'background-color': 'rgb(127 29 29 / 0.9)',
+        'color': 'rgb(254 202 202)',
+        'border-color': 'rgb(185 28 28 / 0.6)'
+      },
+      'medium': {
+        'background-color': 'rgb(124 45 18 / 0.9)',
+        'color': 'rgb(254 215 170)',
+        'border-color': 'rgb(194 65 12 / 0.6)'
+      },
+      'low': {
+        'background-color': 'rgb(31 41 55 / 0.9)',
+        'color': 'rgb(209 213 219)',
+        'border-color': 'rgb(75 85 99 / 0.6)'
+      }
+    };
+    return priorityMap[priority?.toLowerCase()] || {
+      'background-color': 'rgb(31 41 55 / 0.7)',
+      'color': 'rgb(156 163 175)',
+      'border-color': 'rgb(75 85 99 / 0.4)'
+    };
+  }
 
-
-
+  // === NAVIGATION METHODS ===
 
   // Navigation methods
   viewIssue(issue: Issue): void {
@@ -371,6 +407,8 @@ getPriorityStyles(priority: string): any {
     }
   }
 
+  // === UTILITY METHODS ===
+
   // Show notification
   showNotification(message: string, type: 'success' | 'error' = 'success'): void {
     this.snackBar.open(message, 'Close', {
@@ -396,9 +434,8 @@ getPriorityStyles(priority: string): any {
   }
 
   // Truncate ID for display
-truncateId(id: string): string {
-  if (!id || id.length <= 8) return id;
-  return id.slice(0, 4) + '....' + id.slice(-2);
-}
-
+  truncateId(id: string): string {
+    if (!id || id.length <= 8) return id;
+    return id.slice(0, 4) + '....' + id.slice(-2);
+  }
 }
