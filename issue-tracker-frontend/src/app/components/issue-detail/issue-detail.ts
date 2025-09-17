@@ -31,15 +31,12 @@ import { Issue, IssueStatus, IssuePriority } from '../../models/issue';
     MatTooltipModule
   ],
   templateUrl: './issue-detail.html'
-  // ✅ No styleUrl needed - using Tailwind classes
 })
 export class IssueDetailComponent implements OnInit {
   issue: Issue | null = null;
   loading = false;
   error: string | null = null;
   issueId: string | null = null;
-  
-  // For better UX
   deleting = false;
 
   constructor(
@@ -78,7 +75,7 @@ export class IssueDetailComponent implements OnInit {
         console.error('❌ Failed to load issue:', error);
         this.error = this.getErrorMessage(error);
         this.loading = false;
-        this.showNotification('Failed to load issue details');
+        this.showNotification('Failed to load issue details', 'error');
       }
     });
   }
@@ -102,10 +99,7 @@ export class IssueDetailComponent implements OnInit {
     if (!this.issue) return;
 
     const confirmed = confirm(
-      `⚠️ Delete Issue Confirmation\n\n` +
-      `Title: "${this.issue.title}"\n` +
-      `ID: ${this.issue.id}\n\n` +
-      `This action cannot be undone. Are you sure you want to delete this issue?`
+      `Are you sure you want to delete "${this.issue.title}"?\n\nThis action cannot be undone.`
     );
     
     if (confirmed) {
@@ -115,80 +109,73 @@ export class IssueDetailComponent implements OnInit {
       this.issueService.deleteIssue(this.issue.id).subscribe({
         next: () => {
           console.log('✅ Issue deleted successfully');
-          this.showNotification(`Issue "${this.issue!.title}" has been deleted successfully!`);
+          this.showNotification(`Issue "${this.issue!.title}" deleted successfully!`, 'success');
           this.router.navigate(['/issues']);
         },
         error: (error) => {
           console.error('❌ Failed to delete issue:', error);
           this.deleting = false;
-          this.showNotification('Failed to delete issue. Please try again.');
+          this.showNotification('Failed to delete issue. Please try again.', 'error');
         }
       });
     }
   }
 
-  // Get status color for Tailwind classes
+  // Modern status classes matching the issue list design
   getStatusClasses(status: string): string {
-    switch (status) {
-      case IssueStatus.OPEN: 
-        return 'bg-blue-100 text-blue-800 border-blue-200';
-      case IssueStatus.IN_PROGRESS: 
-        return 'bg-purple-100 text-purple-800 border-purple-200';
-      case IssueStatus.CLOSED: 
-        return 'bg-green-100 text-green-800 border-green-200';
-      default: 
-        return 'bg-gray-100 text-gray-800 border-gray-200';
-    }
+    const statusMap: { [key: string]: string } = {
+      'open': 'bg-orange-100 text-orange-800 border border-orange-200',
+      'in-progress': 'bg-blue-100 text-blue-800 border border-blue-200', 
+      'resolved': 'bg-green-100 text-green-800 border border-green-200',
+      'closed': 'bg-slate-100 text-slate-600 border border-slate-200'
+    };
+    return statusMap[status?.toLowerCase()] || 'bg-slate-100 text-slate-600 border border-slate-200';
   }
 
-  // Get priority color for Tailwind classes
+  // Modern priority classes matching the issue list design
   getPriorityClasses(priority: string): string {
-    switch (priority) {
-      case IssuePriority.LOW: 
-        return 'bg-green-100 text-green-800 border-green-200';
-      case IssuePriority.MEDIUM: 
-        return 'bg-yellow-100 text-yellow-800 border-yellow-200';
-      case IssuePriority.HIGH: 
-        return 'bg-orange-100 text-orange-800 border-orange-200';
-      case IssuePriority.CRITICAL: 
-        return 'bg-red-100 text-red-800 border-red-200';
-      default: 
-        return 'bg-gray-100 text-gray-800 border-gray-200';
-    }
+    const priorityMap: { [key: string]: string } = {
+      'high': 'bg-red-100 text-red-800 border border-red-200',
+      'critical': 'bg-red-100 text-red-800 border border-red-200',
+      'medium': 'bg-orange-100 text-orange-800 border border-orange-200',
+      'low': 'bg-slate-100 text-slate-600 border border-slate-200'
+    };
+    return priorityMap[priority?.toLowerCase()] || 'bg-slate-100 text-slate-600 border border-slate-200';
   }
 
-  // Get status icon
+  // Get status icon (simplified for modern UI)
   getStatusIcon(status: string): string {
-    switch (status) {
-      case IssueStatus.OPEN: return 'radio_button_unchecked';
-      case IssueStatus.IN_PROGRESS: return 'schedule';
-      case IssueStatus.CLOSED: return 'check_circle';
-      default: return 'help';
-    }
+    const iconMap: { [key: string]: string } = {
+      'open': 'radio_button_unchecked',
+      'in-progress': 'schedule',
+      'resolved': 'check_circle',
+      'closed': 'check_circle_outline'
+    };
+    return iconMap[status?.toLowerCase()] || 'help';
   }
 
-  // Get priority icon
+  // Get priority icon (simplified for modern UI)
   getPriorityIcon(priority: string): string {
-    switch (priority) {
-      case IssuePriority.LOW: return 'keyboard_arrow_down';
-      case IssuePriority.MEDIUM: return 'remove';
-      case IssuePriority.HIGH: return 'keyboard_arrow_up';
-      case IssuePriority.CRITICAL: return 'warning';
-      default: return 'help';
-    }
+    const iconMap: { [key: string]: string } = {
+      'low': 'keyboard_arrow_down',
+      'medium': 'remove',
+      'high': 'keyboard_arrow_up',
+      'critical': 'warning'
+    };
+    return iconMap[priority?.toLowerCase()] || 'help';
   }
 
-  // Format date for display
+  // Format date for display (cleaner format)
   formatDate(date: Date | string): string {
+    if (!date) return 'N/A';
+    
     try {
       return new Date(date).toLocaleDateString('en-US', {
-        weekday: 'long',
         year: 'numeric',
-        month: 'long',
+        month: 'short',
         day: 'numeric',
         hour: '2-digit',
-        minute: '2-digit',
-        second: '2-digit'
+        minute: '2-digit'
       });
     } catch (error) {
       console.error('Error formatting date:', error);
@@ -196,40 +183,40 @@ export class IssueDetailComponent implements OnInit {
     }
   }
 
-  // Get relative time (e.g., "2 hours ago")
+  // Get relative time (e.g., "2 hours ago") - more concise
   getRelativeTime(date: Date | string): string {
+    if (!date) return '';
+    
     try {
       const now = new Date();
-      const then = new Date(date);
-      const diffMs = now.getTime() - then.getTime();
-      const diffMins = Math.floor(diffMs / (1000 * 60));
-      const diffHours = Math.floor(diffMins / 60);
-      const diffDays = Math.floor(diffHours / 24);
-
-      if (diffMins < 1) return 'Just now';
-      if (diffMins < 60) return `${diffMins} minute${diffMins !== 1 ? 's' : ''} ago`;
-      if (diffHours < 24) return `${diffHours} hour${diffHours !== 1 ? 's' : ''} ago`;
-      if (diffDays < 7) return `${diffDays} day${diffDays !== 1 ? 's' : ''} ago`;
+      const targetDate = new Date(date);
+      const diffInSeconds = Math.floor((now.getTime() - targetDate.getTime()) / 1000);
+      
+      if (diffInSeconds < 60) return 'just now';
+      if (diffInSeconds < 3600) return `${Math.floor(diffInSeconds / 60)}m ago`;
+      if (diffInSeconds < 86400) return `${Math.floor(diffInSeconds / 3600)}h ago`;
+      if (diffInSeconds < 2592000) return `${Math.floor(diffInSeconds / 86400)}d ago`;
+      
       return this.formatDate(date);
     } catch (error) {
       return this.formatDate(date);
     }
   }
 
-  // Get formatted JSON for display
+  // Get formatted JSON for display (cleaner structure)
   getFormattedJson(): string {
     if (!this.issue) return '';
     
-    // Create a clean version for JSON display
+    // Create a clean version matching your backend structure
     const jsonData = {
       id: this.issue.id,
       title: this.issue.title,
-      description: this.issue.description,
+      description: this.issue.description || null,
       status: this.issue.status,
       priority: this.issue.priority,
-      assignee: this.issue.assignee,
-      created_at: this.issue.created_at,
-      updated_at: this.issue.updated_at
+      assignee: this.issue.assignee || null,
+      createdAt: this.issue.created_at,
+      updatedAt: this.issue.updated_at
     };
     
     return JSON.stringify(jsonData, null, 2);
@@ -241,29 +228,46 @@ export class IssueDetailComponent implements OnInit {
 
     const jsonString = this.getFormattedJson();
     navigator.clipboard.writeText(jsonString).then(() => {
-      this.showNotification('📋 JSON data copied to clipboard!');
-    }).catch(() => {
-      this.showNotification('Failed to copy to clipboard');
+      this.showNotification('JSON copied to clipboard!', 'success');
+    }).catch((error) => {
+      console.error('Clipboard error:', error);
+      this.showNotification('Failed to copy to clipboard', 'error');
     });
   }
 
-  // Show notification
-  showNotification(message: string, duration: number = 4000): void {
+  // Share issue URL
+  shareIssue(): void {
+    if (!this.issue) return;
+
+    const url = window.location.href;
+    navigator.clipboard.writeText(url).then(() => {
+      this.showNotification('Issue URL copied to clipboard!', 'success');
+    }).catch((error) => {
+      console.error('Clipboard error:', error);
+      this.showNotification('Failed to copy URL', 'error');
+    });
+  }
+
+  // Show notification with consistent styling
+  showNotification(message: string, type: 'success' | 'error' = 'success', duration: number = 4000): void {
     this.snackBar.open(message, 'Close', {
       duration,
       horizontalPosition: 'end',
       verticalPosition: 'top',
+      panelClass: type === 'error' ? ['error-snackbar'] : ['success-snackbar']
     });
   }
 
   // Get user-friendly error message
   getErrorMessage(error: any): string {
     if (error?.status === 0) {
-      return 'Unable to connect to the server. Please make sure the backend is running.';
+      return 'Unable to connect to the server. Please check if the backend is running on http://localhost:8000';
     } else if (error?.status === 404) {
       return 'Issue not found. It may have been deleted or the ID is incorrect.';
     } else if (error?.status >= 500) {
       return 'Server error occurred. Please try again later.';
+    } else if (error?.error?.message) {
+      return error.error.message;
     } else if (error?.message) {
       return error.message;
     } else {
@@ -277,17 +281,5 @@ export class IssueDetailComponent implements OnInit {
       console.log('🔄 Retrying to load issue:', this.issueId);
       this.loadIssue(this.issueId);
     }
-  }
-
-  // Share issue (simple URL copy)
-  shareIssue(): void {
-    if (!this.issue) return;
-
-    const url = window.location.href;
-    navigator.clipboard.writeText(url).then(() => {
-      this.showNotification('🔗 Issue URL copied to clipboard!');
-    }).catch(() => {
-      this.showNotification('Failed to copy URL');
-    });
   }
 }

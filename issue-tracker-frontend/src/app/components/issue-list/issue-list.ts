@@ -37,7 +37,7 @@ import { Issue, IssueStatus, IssuePriority } from '../../models/issue';
 })
 export class IssueListComponent implements OnInit {
   // Simple table configuration
-  displayedColumns: string[] = ['title', 'status', 'priority', 'assignee', 'actions'];
+  displayedColumns: string[] = ['id','title', 'status', 'priority', 'assignee','updatedAt', 'actions'];
   dataSource = new MatTableDataSource<Issue>([]);
 
   // Component state
@@ -95,26 +95,25 @@ export class IssueListComponent implements OnInit {
     this.loadAllIssues();
   }
 
-  // Get status styling classes
-  getStatusClasses(status: string): string {
-    switch (status) {
-      case 'open': return 'bg-blue-100 text-blue-800 border-blue-200';
-      case 'in_progress': return 'bg-purple-100 text-purple-800 border-purple-200';
-      case 'closed': return 'bg-green-100 text-green-800 border-green-200';
-      default: return 'bg-gray-100 text-gray-800 border-gray-200';
-    }
-  }
+ getStatusClasses(status: string): string {
+  const statusMap: { [key: string]: string } = {
+    'open': 'bg-orange-100 text-orange-800 border border-orange-200',
+    'in-progress': 'bg-blue-100 text-blue-800 border border-blue-200', 
+    'resolved': 'bg-green-100 text-green-800 border border-green-200',
+    'closed': 'bg-slate-100 text-slate-600 border border-slate-200'
+  };
+  return statusMap[status?.toLowerCase()] || 'bg-slate-100 text-slate-600 border border-slate-200';
+}
 
-  // Get priority styling classes
-  getPriorityClasses(priority: string): string {
-    switch (priority) {
-      case 'low': return 'bg-green-100 text-green-800 border-green-200';
-      case 'medium': return 'bg-yellow-100 text-yellow-800 border-yellow-200';
-      case 'high': return 'bg-orange-100 text-orange-800 border-orange-200';
-      case 'critical': return 'bg-red-100 text-red-800 border-red-200';
-      default: return 'bg-gray-100 text-gray-800 border-gray-200';
-    }
-  }
+getPriorityClasses(priority: string): string {
+  const priorityMap: { [key: string]: string } = {
+    'high': 'bg-red-100 text-red-800 border border-red-200',
+    'medium': 'bg-orange-100 text-orange-800 border border-orange-200',
+    'low': 'bg-slate-100 text-slate-600 border border-slate-200'
+  };
+  return priorityMap[priority?.toLowerCase()] || 'bg-slate-100 text-slate-600 border border-slate-200';
+}
+
 
   // Navigation methods
   viewIssue(issue: Issue): void {

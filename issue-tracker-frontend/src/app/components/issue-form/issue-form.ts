@@ -398,4 +398,30 @@ export class IssueFormComponent implements OnInit {
     this.issueForm.patchValue(sampleData);
     this.showNotification('🧪 Form filled with sample data', 'info');
   }
+
+
+  getStatusDescription(status: string): string {
+  const descriptions: { [key: string]: string } = {
+    'open': 'Issue is new and needs attention',
+    'in-progress': 'Currently being worked on',
+    'resolved': 'Issue has been fixed',
+    'closed': 'Issue is completed and verified'
+  };
+  return descriptions[status] || '';
 }
+
+getPriorityDescription(priority: string): string {
+  const descriptions: { [key: string]: string } = {
+    'low': 'Can be addressed later',
+    'medium': 'Should be addressed soon',
+    'high': 'Needs immediate attention',
+    'critical': 'Urgent - requires immediate action'
+  };
+  return descriptions[priority] || '';
+}
+
+
+
+}
+
+
