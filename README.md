@@ -148,7 +148,7 @@ issue-tracker/
 1. Connect GitHub repository to Render
 2. Configure environment variables
 3. Set build command: `pip install -r requirements.txt`
-4. Set start command: `uvicorn main:app --host 0.0.0.0 --port $PORT`
+4. Set start command: `python run.py`
 
 ### Frontend (Vercel)
 1. Connect GitHub repository to Vercel
