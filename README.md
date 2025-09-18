@@ -55,7 +55,7 @@ A modern Issue Tracker built with FastAPI (Python) backend and Angular (TypeScri
 
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/issue-tracker.git
+git clone https://github.com/realutkarshh/issue-tracker.git
 cd issue-tracker/backend
 
 # Create virtual environment
@@ -66,14 +66,14 @@ source venv/bin/activate  # On Windows: venv\Scripts\activate
 pip install -r requirements.txt
 
 # Run the server
-uvicorn main:app --reload --host 0.0.0.0 --port 8000
+python run.py
 ```
 
 ### Frontend Setup
 
 ```bash
 # Navigate to frontend directory
-cd ../frontend
+cd ../issue-tracker-frontend
 
 # Install dependencies
 npm install
@@ -95,42 +95,22 @@ ng build --prod
 | POST | `/issues` | Create new issue |
 | PUT | `/issues/{id}` | Update existing issue |
 
-### Query Parameters for `/issues`
-
-- `search`: Search by title
-- `status`: Filter by status
-- `priority`: Filter by priority
-- `assignee`: Filter by assignee
-- `sort_by`: Sort field
-- `sort_order`: `asc` or `desc`
-- `page`: Page number (default: 1)
-- `page_size`: Items per page (default: 10)
-
-## 📱 Screenshots
-
-### Issues List View
-![Issues List](
-
-
-### Issue Detail View
-![Issue Detail](screenshots/issue-detail.png/Edit Issue Form
-![Issue Form](screenshots/issue-form. Structure
 
 ```
 issue-tracker/
-├── backend/
+├── issue-tracker-backend/
 │   ├── main.py              # FastAPI application
 │   ├── models.py            # Pydantic models
 │   ├── database.py          # In-memory database simulation
 │   ├── requirements.txt     # Python dependencies
 │   └── README.md
-├── frontend/
+├── issue-tracker-frontend/
 │   ├── src/
 │   │   ├── app/
 │   │   │   ├── components/
 │   │   │   ├── services/
 │   │   │   ├── models/
-│   │   │   └── app.module.ts
+│   │   │   └── app.component.ts
 │   │   ├── assets/
 │   │   └── environments/
 │   ├── angular.json
@@ -176,29 +156,16 @@ issue-tracker/
 3. Set environment variables for API URL
 4. Deploy with automatic CI/CD
 
-## 🔮 Future Enhancements
-
-- User authentication and authorization
-- Real database integration (PostgreSQL/MongoDB)
-- File attachments for issues
-- Email notifications
-- Advanced reporting and analytics
-- Mobile responsive improvements
-- Real-time updates with WebSockets
-
 ## 🤝 Contributing
 
 Contributions are welcome! Please feel free to submit a Pull Request.
 
-## 📄 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ## 👨‍💻 Author
 
-**Your Name**
-- GitHub: [@yourusername](https://github.com/realutkarshh)
-- LinkedIn: [Your LinkedIn](https://linkedin.com/in/realutkarshh)
+**Utkarsh Singh**
+- GitHub: [@realutkarshh](https://github.com/realutkarshh)
+- LinkedIn: [Utkarsh Singh](https://linkedin.com/in/realutkarshh)
 
 ***
 
