@@ -9,7 +9,7 @@ import { Issue, CreateIssueRequest, UpdateIssueRequest } from '../models/issue';
   providedIn: 'root'
 })
 export class IssueService {
-  private readonly API_URL = 'http://localhost:8000';
+  private readonly API_URL = 'https://issue-tracker-kp69.onrender.com';
 
   constructor(private http: HttpClient) {
     console.log('🔧 IssueService initialized with API_URL:', this.API_URL);
