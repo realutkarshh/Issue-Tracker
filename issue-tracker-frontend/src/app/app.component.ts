@@ -28,7 +28,7 @@ import { IssueService } from './services/issue.service';
   // ✅ No styleUrl - using Tailwind CSS
 })
 export class AppComponent implements OnInit {
-  title = 'Issue Tracker';
+  title = 'IssueFlow';
 
   constructor(private issueService: IssueService) {}
 
