@@ -33,7 +33,7 @@ app = FastAPI(
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
-        "http://localhost:4200",    # Angular dev server
+        "https://issue-tracker-eight-pi.vercel.app",    # Angular dev server
         "http://127.0.0.1:4200",   # Alternative localhost
         "https://localhost:4200",  # HTTPS
         "*"  # Allow all origins for development
