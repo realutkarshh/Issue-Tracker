@@ -102,14 +102,6 @@
               <span class="w-2 h-2 bg-green-500 rounded-full"></span>
               Description
             </label>
-            <button
-              type="button"
-              (click)="previewDescription()"
-              class="px-2 py-1 text-xs font-medium text-blue-400 hover:text-blue-300 hover:bg-blue-950/50 rounded-lg transition-colors"
-              matTooltip="Preview description"
-            >
-              👁️ Preview
-            </button>
           </div>
           <div class="relative">
             <textarea
@@ -261,18 +253,6 @@
           </button>
         </div>
 
-        <!-- Form Debug Info (Development Only) -->
-        <details class="mt-8 p-4 bg-gray-900/50 rounded-xl text-xs text-gray-400">
-          <summary class="cursor-pointer font-medium hover:text-gray-300">🔍 Form Debug Info (Dev Only)</summary>
-          <div class="mt-2 space-y-1">
-            <div><strong>Form Valid:</strong> {{ issueForm.valid }}</div>
-            <div><strong>Form Touched:</strong> {{ issueForm.touched }}</div>
-            <div><strong>Form Dirty:</strong> {{ issueForm.dirty }}</div>
-            <div><strong>Form Status:</strong> {{ issueForm.status }}</div>
-            <div><strong>Form Value:</strong></div>
-            <pre class="text-xs bg-black/50 p-2 rounded border border-gray-800 overflow-x-auto text-gray-300">{{ issueForm.value | json }}</pre>
-          </div>
-        </details>
       </form>
     </div>
   </div>
