@@ -87,11 +87,11 @@ export class IssueListComponent implements OnInit, AfterViewInit {
     private router: Router,
     private snackBar: MatSnackBar
   ) {
-    console.log('🔧 IssueListComponent constructor');
+    // console.log('🔧 IssueListComponent constructor');
   }
 
   ngOnInit(): void {
-    console.log('🚀 IssueListComponent initialized');
+    // console.log('🚀 IssueListComponent initialized');
 
     // Set custom filter predicate early so applyFilters() works immediately after data load.
     this.dataSource.filterPredicate = this.createFilter();
@@ -141,13 +141,13 @@ export class IssueListComponent implements OnInit, AfterViewInit {
 
   // Load ALL issues from MongoDB
   loadAllIssues(): void {
-    console.log('📡 Loading ALL issues from MongoDB...');
+    // console.log(' Loading ALL issues from MongoDB...');
     this.loading = true;
     this.error = null;
 
     this.issueService.getIssues().subscribe({
       next: (issues: Issue[]) => {
-        console.log('✅ Issues loaded successfully:', issues);
+        // console.log(' Issues loaded successfully:', issues);
 
         this.issues = issues;
         this.dataSource.data = issues;
@@ -166,7 +166,7 @@ export class IssueListComponent implements OnInit, AfterViewInit {
         this.loading = false;
         this.error = null;
 
-        console.log(`📊 Total issues loaded: ${issues.length}`);
+        // console.log(`Total issues loaded: ${issues.length}`);
       },
       error: (error) => {
         console.error('❌ Failed to load issues:', error);
@@ -305,14 +305,13 @@ export class IssueListComponent implements OnInit, AfterViewInit {
 
   // Handle pagination changes (for additional custom logic if needed)
   onPageChange(event: PageEvent): void {
-    // MatPaginator handles the pagination automatically via dataSource.paginator
-    // This method is kept if you want to track page changes or call analytics.
+    
     console.log('📄 Page changed:', event);
   }
 
   // Refresh issues
   refreshIssues(): void {
-    console.log('🔄 Refreshing issues');
+    // console.log('Refreshing issues');
     this.loadAllIssues();
   }
 
@@ -408,17 +407,17 @@ export class IssueListComponent implements OnInit, AfterViewInit {
   // === NAVIGATION METHODS ===
 
   viewIssue(issue: Issue): void {
-    console.log('👀 Viewing issue:', issue.id);
+    // console.log('Viewing issue:', issue.id);
     this.router.navigate(['/issues', issue.id]);
   }
 
   createIssue(): void {
-    console.log('➕ Creating new issue');
+    // console.log('Creating new issue');
     this.router.navigate(['/create']);
   }
 
   editIssue(issue: Issue): void {
-    console.log('✏️ Editing issue:', issue.id);
+    // console.log('Editing issue:', issue.id);
     this.router.navigate(['/edit', issue.id]);
   }
 
@@ -426,11 +425,11 @@ export class IssueListComponent implements OnInit, AfterViewInit {
     const confirmed = confirm(`Delete issue: "${issue.title}"?`);
 
     if (confirmed) {
-      console.log('🗑️ Deleting issue:', issue.id);
+      // console.log('Deleting issue:', issue.id);
 
       this.issueService.deleteIssue(issue.id).subscribe({
         next: () => {
-          console.log('✅ Issue deleted successfully');
+          // console.log('✅ Issue deleted successfully');
           this.showNotification('Issue deleted successfully!', 'success');
           this.loadAllIssues();
         },
@@ -456,7 +455,7 @@ export class IssueListComponent implements OnInit, AfterViewInit {
     console.log('🔌 Testing backend connection...');
     this.issueService.healthCheck().subscribe({
       next: (response) => {
-        console.log('✅ Backend connected:', response);
+        // console.log('✅ Backend connected:', response);
         this.showNotification('✅ Backend connection successful!', 'success');
       },
       error: (error) => {

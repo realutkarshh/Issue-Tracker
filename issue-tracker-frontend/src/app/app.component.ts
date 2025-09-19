@@ -22,26 +22,25 @@ import { IssueService } from './services/issue.service';
     MatButtonModule,
     MatIconModule,
     MatSnackBarModule,
-    MatMenuModule  // ✅ ADD THIS
+    MatMenuModule  
   ],
   templateUrl: './app.component.html'
-  // ✅ No styleUrl - using Tailwind CSS
 })
+
 export class AppComponent implements OnInit {
   title = 'IssueFlow';
 
   constructor(private issueService: IssueService) {}
 
   ngOnInit(): void {
-    // Test API connection on app startup
-    console.log('🚀 Issue Tracker Application Started');
+    // console.log('Issue Tracker Application Started');
     this.testBackendConnection();
   }
 
   private testBackendConnection(): void {
     this.issueService.healthCheck().subscribe({
       next: (response) => {
-        console.log('✅ Backend connected successfully:', response);
+        // console.log('Backend connected successfully:', response);
       },
       error: (error) => {
         console.warn('⚠️ Backend not available:', error);
